@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: recipe-service
+  cloud:
+    enabled: false
+    consul:
+      enabled: false
+      host: localhost
+      port: 8500
+      discovery:
+        hostname: localhost
+        prefer-ip-address: false
+        register: false
+        instance-id: recipe-service-${server.port}
+        service-name: recipe-service
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+  datasource:
+    url: jdbc:mysql://localhost:3306/recipe_service?useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8001
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
