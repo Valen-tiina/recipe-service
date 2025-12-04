@@ -2,6 +2,7 @@ package com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities;
 import com.zabora.recipe_service.recipe_service.model.entities.CategoriesEntities.Category;
 import com.zabora.recipe_service.recipe_service.model.entities.CategoriesEntities.Difficulty;
 import com.zabora.recipe_service.recipe_service.model.entities.CategoriesEntities.Flavor;
+import com.zabora.recipe_service.recipe_service.model.entities.IngredientsEntities.RecipeIngredient;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,11 +34,11 @@ public class Recipe {
     @Column(nullable = false)
     private Integer servings;
 
+
     @ManyToOne
     @JoinColumn(name = "license_recipe_id")
     private LicenseRecipe license;
 
-    /* -------------------- Many To Many con Category -------------------- */
     @ManyToMany
     @JoinTable(
             name = "recipe_categories",
@@ -46,7 +47,6 @@ public class Recipe {
     )
     private Set<Category> categories;
 
-    /* -------------------- Many To Many con Flavor -------------------- */
     @ManyToMany
     @JoinTable(
             name = "recipe_flavors",
@@ -54,4 +54,16 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "flavor_id")
     )
     private Set<Flavor> flavors;
+
+    // 1. Mapeo de Pasos
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Step> steps;
+
+    // 2. Mapeo de Ingredientes (usa la tabla puente recipe_ingredients)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<RecipeIngredient> ingredients;
+
+    // 3. Mapeo de Imágenes
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<RecipeImage> images;
 }

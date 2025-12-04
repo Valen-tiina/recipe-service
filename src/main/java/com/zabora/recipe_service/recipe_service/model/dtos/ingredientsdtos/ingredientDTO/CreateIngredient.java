@@ -2,7 +2,7 @@ package com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingr
 
 public record CreateIngredient(
         String name,
-        Integer measurement_id,
+        Integer measurementId,
         String imageUrl
 ) {
 }

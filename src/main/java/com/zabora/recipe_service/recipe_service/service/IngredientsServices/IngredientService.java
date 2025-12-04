@@ -20,7 +20,7 @@ public class IngredientService {
         this.measureRepo = measureRepo;
     }
     public ResponseIngredient createIngredient(CreateIngredient dto){
-        var measurement = measureRepo.findById(dto.measurement_id())
+        var measurement = measureRepo.findById(dto.measurementId())
                 .orElseThrow(()->new RuntimeException("Medida no encontrada"));
 
         var ingredient = new Ingredient();
@@ -66,7 +66,7 @@ public class IngredientService {
         var ingredient = ingredientRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ingrediente no encontrado"));
 
-        var measurement = measureRepo.findById(dto.measurement_id())
+        var measurement = measureRepo.findById(dto.measurementId())
                 .orElseThrow(() -> new RuntimeException("Medida no encontrada"));
 
         ingredient.setName(dto.name());
