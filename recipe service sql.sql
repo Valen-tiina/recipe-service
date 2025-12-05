@@ -1,5 +1,4 @@
 set foreign_key_checks = 0;
-
 create database if not exists recipe_service character set utf8mb4 collate utf8mb4_general_ci;
 use recipe_service;
 
@@ -9,7 +8,8 @@ name_difficulty varchar(6) not null);
 
 create table licenses_recipe(
 ID int auto_increment primary key,
-name_license varchar(150)not null);
+name_license varchar(150)not null,
+url_recipe varchar(150) not null);
 
 create table recipes (
 ID int auto_increment primary key,
@@ -116,6 +116,7 @@ constraint fk_ri_ingredient foreign key (ingredient_id) references ingredients(I
 constraint fk_ri_unit foreign key (unit_id) references units(ID)on delete cascade on update cascade
 )ENGINE=InnoDB;
 
+
 set foreign_key_checks = 1;
 
     /* INSERCIONES */
@@ -160,3 +161,6 @@ INSERT INTO step_templates (title, short_desc, image_url) VALUES
 ('Sellar la Proteína', 'Sellar la carne, pollo o pescado en una sartén con aceite caliente hasta dorar.', 'https://img.default.com/searing.jpg'),
 ('Amasar y Reposar', 'Amasar la masa hasta que esté elástica y dejar reposar en un lugar cálido.', 'https://img.default.com/kneading.jpg'),
 ('Emplatar y Servir', 'Colocar el plato principal y los acompañamientos de forma estética.', 'https://img.default.com/plating.jpg');
+
+
+select * from ingredients;
