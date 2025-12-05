@@ -56,17 +56,10 @@ ID int auto_increment primary key,
 name_license varchar(100) not null,
 url_recipe varchar(150) not null);
 
-CREATE TABLE step_templates (
-id int PRIMARY KEY AUTO_INCREMENT,
-title VARCHAR(100) NOT NULL,
-short_desc varchar(255) NOT NULL,
-image_url VARCHAR(500) NOT NULL
-);
-
 create table steps (
 ID int auto_increment primary key,
 recipe_id int not null,
-step_template_id int NOT NULL,
+step_template_id int,
 step_order int not null,
 description_step varchar(255),
 time_seconds int,
@@ -153,14 +146,4 @@ insert into flavors(name_flavor)values
     ('Agridulce'),
     ('Ácido');
     
-INSERT INTO step_templates (title, short_desc, image_url) VALUES
-('Precalentamiento del Horno', 'Precalentar el horno a la temperatura especificada en la receta.', 'https://img.default.com/oven.jpg'),
-('Preparación Inicial de Ingredientes', 'Lavar y picar todos los vegetales e ingredientes secos.', 'https://img.default.com/prep.jpg'),
-('Mezcla de Ingredientes Secos', 'Combinar harina, azúcar, levadura y sal en un recipiente grande.', 'https://img.default.com/dry_mix.jpg'),
-('Mezcla de Ingredientes Húmedos', 'Batir huevos, leche y aceite en un recipiente por separado.', 'https://img.default.com/wet_mix.jpg'),
-('Sellar la Proteína', 'Sellar la carne, pollo o pescado en una sartén con aceite caliente hasta dorar.', 'https://img.default.com/searing.jpg'),
-('Amasar y Reposar', 'Amasar la masa hasta que esté elástica y dejar reposar en un lugar cálido.', 'https://img.default.com/kneading.jpg'),
-('Emplatar y Servir', 'Colocar el plato principal y los acompañamientos de forma estética.', 'https://img.default.com/plating.jpg');
-
-
 select * from ingredients;
