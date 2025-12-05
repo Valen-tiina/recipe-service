@@ -17,10 +17,6 @@ public class Step {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "step_template_id")
-    private StepTemplate template;
-
     @Column(name = "step_order", nullable = false)
     private Integer order;
 

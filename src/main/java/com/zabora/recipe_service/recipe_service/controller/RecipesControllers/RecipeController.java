@@ -6,6 +6,8 @@ import com.zabora.recipe_service.recipe_service.service.RecipesServices.RecipeSe
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/recipes")
 public class RecipeController {
@@ -21,4 +23,11 @@ public class RecipeController {
         ResponseRecipes createdRecipe = recipeService.createRecipe(dto);
         return ResponseEntity.ok(createdRecipe);
     }
+
+    @GetMapping
+    public ResponseEntity<List<ResponseRecipes>> getAllRecipes() {
+        List<ResponseRecipes> recipes = recipeService.getAllRecipes();
+        return ResponseEntity.ok(recipes);
+    }
+
 }
