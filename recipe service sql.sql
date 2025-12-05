@@ -102,7 +102,7 @@ create table recipe_ingredients (
 ID int auto_increment primary key,
 recipe_id int not null,
 ingredient_id int not null,
-quantity decimal(5,2) not null,
+quantity decimal(10,2) not null,
 unit_id int not null,
 constraint fk_ri_recipe2 foreign key (recipe_id) references recipes(ID)on delete cascade on update cascade,
 constraint fk_ri_ingredient foreign key (ingredient_id) references ingredients(ID) on delete cascade on update cascade,
