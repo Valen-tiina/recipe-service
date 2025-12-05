@@ -22,7 +22,7 @@ import com.zabora.recipe_service.recipe_service.repository.IngredientsRepository
 import com.zabora.recipe_service.recipe_service.repository.RecipeRepository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -90,6 +90,7 @@ public class RecipeService {
 
         LicenseRecipe license = new LicenseRecipe();
         license.setName(dto.licenseName());
+        license.setUrlImage(dto.licenseUrl());
         license = licenseRecipeRepository.save(license);
 
         // 2. CREAR RECETA BASE SIN TOTAL TIME TODAVÍA
@@ -99,8 +100,8 @@ public class RecipeService {
         recipe.setServings(dto.servings());
         recipe.setDifficulty(difficulty);
         recipe.setLicense(license);
-        recipe.setCategories(Set.copyOf(categories));
-        recipe.setFlavors(Set.copyOf(flavors));
+        recipe.setCategories(new HashSet<>(categories));
+        recipe.setFlavors(new HashSet<>(flavors));
 
         recipe = recipeRepository.save(recipe);
 

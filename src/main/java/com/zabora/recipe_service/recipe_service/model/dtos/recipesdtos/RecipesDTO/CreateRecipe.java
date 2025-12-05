@@ -13,6 +13,7 @@ public record CreateRecipe(
         Integer servings,
         Integer difficultyId,
         String licenseName,
+        String licenseUrl,
         Set<Integer> categoryIds,
         Set<Integer> flavorIds,
         Set<CreateRecipeIngredient> ingredients,
