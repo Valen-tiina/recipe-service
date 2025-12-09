@@ -30,4 +30,9 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseRecipes> getRecipeById(@PathVariable Integer id) {
+        return ResponseEntity.ok(recipeService.getRecipeById(id));
+    }
+
 }

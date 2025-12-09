@@ -212,4 +212,11 @@ public class RecipeService {
                 .map(this::mapToResponse)
                 .toList();
     }
+
+    public ResponseRecipes getRecipeById(Integer id) {
+        var recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Receta no encontrada"));
+
+        return mapToResponse(recipe);
+    }
 }
