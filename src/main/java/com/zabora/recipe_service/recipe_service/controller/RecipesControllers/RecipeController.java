@@ -35,4 +35,21 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
+    @GetMapping("/multiple")
+    public ResponseEntity<List<ResponseRecipes>> getRecipesByIds(@RequestParam List<Integer> ids) {
+        List<ResponseRecipes> recipes = recipeService.getRecipesByIds(ids);
+        return ResponseEntity.ok(recipes);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ResponseRecipes>> searchRecipesByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(recipeService.searchRecipesByTitle(title));
+    }
+
+    @GetMapping("/search/ingredient")
+    public ResponseEntity<List<ResponseRecipes>> searchRecipesByIngredient(
+            @RequestParam String ingredient
+    ) {
+        return ResponseEntity.ok(recipeService.searchRecipesByIngredient(ingredient));
+    }
 }

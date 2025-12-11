@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipeService {
@@ -218,5 +219,47 @@ public class RecipeService {
                 .orElseThrow(() -> new RuntimeException("Receta no encontrada"));
 
         return mapToResponse(recipe);
+    }
+
+    public List<ResponseRecipes> getRecipesByIds(List<Integer> ids) {
+
+        var recipesMap = recipeRepository.findAllById(ids).stream()
+                .collect(Collectors.toMap(
+                        receta -> receta.getId(),
+                        receta -> receta
+                ));
+
+
+        return ids.stream()
+                .map(recipesMap::get)
+                .filter(r -> r != null)
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    public List<ResponseRecipes> searchRecipesByTitle(String title) {
+
+        var recipes = recipeRepository.findByTitleContainingIgnoreCase(title);
+
+        if (recipes.isEmpty()) {
+            throw new RuntimeException("No se encontraron recetas con ese título");
+        }
+
+        return recipes.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    public List<ResponseRecipes> searchRecipesByIngredient(String ingredient) {
+
+        var recipes = recipeRepository.findByIngredientsIngredientNameContainingIgnoreCase(ingredient);
+
+        if (recipes.isEmpty()) {
+            throw new RuntimeException("No se encontraron recetas con ese ingrediente");
+        }
+
+        return recipes.stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 }
