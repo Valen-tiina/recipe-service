@@ -1,8 +1,14 @@
 package com.zabora.recipe_service.recipe_service.service.IngredientsServices;
 
+import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.MeasurementResponse;
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.UnitResponse;
+import com.zabora.recipe_service.recipe_service.model.entities.IngredientsEntities.Measurement;
+import com.zabora.recipe_service.recipe_service.model.entities.IngredientsEntities.Unit;
 import com.zabora.recipe_service.recipe_service.repository.IngredientsRepository.UnitRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UnitService {
@@ -13,14 +19,18 @@ public class UnitService {
         this.unitRepository = unitRepository;
     }
 
-    /**
-     * Recupera todas las unidades de medida y las mapea al DTO de respuesta.
-     * @return Lista de UnitResponse.
-     */
-    public List<UnitResponse> getAllUnits() {
-        return unitRepository.findAll() // 👈 Llama a tu repositorio
-                .stream()
-                .map(UnitMapper::toResponse) // 👈 Usa el Mapper para convertir
-                .collect(Collectors.toList());
+    public List<UnitResponse> findAll() {
+        List <Unit> units = unitRepository.findAll();
+        return units.stream()
+                .map(u -> new UnitResponse(
+                        u.getId(),
+                        u.getName(),
+                        // Tienes que mapear el objeto Measurement a MeasurementResponse
+                        new MeasurementResponse(
+                                u.getMeasurement().getId(),
+                                u.getMeasurement().getName() // Asumiendo estos campos
+                        )
+                )).toList();
     }
+
 }

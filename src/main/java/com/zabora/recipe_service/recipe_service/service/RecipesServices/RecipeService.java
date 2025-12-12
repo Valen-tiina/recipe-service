@@ -135,7 +135,7 @@ public class RecipeService {
 
             var step = new Step();
             step.setRecipe(recipe);
-            step.setOrder(stepDto.stepOrder());
+            step.setOrder(stepDto.order());
             step.setDescription(stepDto.description());
             step.setTimeSeconds(stepDto.timeSeconds());
             step.setImageUrl(stepDto.imageUrl());
