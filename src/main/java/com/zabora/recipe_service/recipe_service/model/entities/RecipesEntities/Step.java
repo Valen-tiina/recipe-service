@@ -18,7 +18,7 @@ public class Step {
     private Recipe recipe;
 
     @Column(name = "step_order", nullable = false)
-    private Integer order;
+    private Integer stepOrder;
 
     @Column(name = "description_step", length = 255)
     private String description;

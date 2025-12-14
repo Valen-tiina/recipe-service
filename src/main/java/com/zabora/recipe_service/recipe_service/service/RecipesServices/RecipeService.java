@@ -135,7 +135,7 @@ public class RecipeService {
 
             var step = new Step();
             step.setRecipe(recipe);
-            step.setOrder(stepDto.order());
+            step.setStepOrder(stepDto.stepOrder());
             step.setDescription(stepDto.description());
             step.setTimeSeconds(stepDto.timeSeconds());
             step.setImageUrl(stepDto.imageUrl());
@@ -199,7 +199,7 @@ public class RecipeService {
                         .stream()
                         .map(s -> new ResponseSteps(
                                 s.getId(),
-                                s.getOrder(),
+                                s.getStepOrder(),
                                 s.getDescription(),
                                 s.getTimeSeconds(),
                                 s.getImageUrl()

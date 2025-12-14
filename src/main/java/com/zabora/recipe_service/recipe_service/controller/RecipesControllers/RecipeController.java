@@ -3,6 +3,7 @@ package com.zabora.recipe_service.recipe_service.controller.RecipesControllers;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.CreateRecipe;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
 import com.zabora.recipe_service.recipe_service.service.RecipesServices.RecipeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,4 +53,5 @@ public class RecipeController {
     ) {
         return ResponseEntity.ok(recipeService.searchRecipesByIngredient(ingredient));
     }
+
 }
