@@ -360,63 +360,73 @@ Content-Type: application/json
 **Body Completo:**
 ```json
 {
-  "title": "Tacos al Pastor",
-  "shortDescription": "Tacos mexicanos tradicionales con carne de cerdo marinada",
+  "title": "Pasta Carbonara",
+  "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
   "servings": 4,
   "difficultyId": 2,
   "licenseName": "Creative Commons BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
   "categoryIds": [2, 3],
-  "flavorIds": [1, 3],
+  "flavorIds": [1],
   "ingredients": [
     {
       "ingredientId": 1,
-      "quantity": 500,
+      "quantity": 400,
       "unitId": 9
-    },
-    {
-      "ingredientId": 2,
-      "quantity": 2,
-      "unitId": 4
-    },
-    {
-      "ingredientId": 3,
-      "quantity": 1,
-      "unitId": 6
     }
   ],
   "images": [
     {
-      "name": "Imagen principal de tacos",
-      "imageUrl": "https://ejemplo.com/images/tacos-principal.jpg",
-      "altText": "Plato de tacos al pastor servidos",
-      "position": 1
+      "imageUrl": "https://example.com/images/carbonara-main.jpg",
+      "altText": "Plato de pasta carbonara servido",
+      "position": 1,
+      "licenseName": "Unsplash License",
+      "licenseUrl": "https://unsplash.com/license"
     },
     {
-      "name": "Vista lateral",
-      "imageUrl": "https://ejemplo.com/images/tacos-lateral.jpg",
-      "altText": "Vista lateral de los tacos",
-      "position": 2
+      "imageUrl": "https://example.com/images/carbonara-process.jpg",
+      "altText": "Proceso de preparación de la carbonara",
+      "position": 2,
+      "licenseName": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
     }
   ],
   "steps": [
     {
       "stepOrder": 1,
-      "description": "Marinar la carne con especias durante 2 horas",
-      "timeSeconds": 7200,
-      "imageUrl": "https://ejemplo.com/images/step1-marinado.jpg"
+      "description": "Poner a hervir agua con sal en una olla grande",
+      "timeSeconds": 300,
+      "imageUrl": "https://example.com/images/step1.jpg"
     },
     {
       "stepOrder": 2,
-      "description": "Asar la carne en trompo o sartén hasta que esté dorada",
-      "timeSeconds": 1800,
-      "imageUrl": "https://ejemplo.com/images/step2-asado.jpg"
+      "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+      "timeSeconds": 420,
+      "imageUrl": "https://example.com/images/step2.jpg"
     },
     {
       "stepOrder": 3,
-      "description": "Calentar las tortillas y servir con cebolla, cilantro y piña",
-      "timeSeconds": 300,
-      "imageUrl": "https://ejemplo.com/images/step3-servir.jpg"
+      "description": "Cocinar la pasta según las instrucciones del paquete",
+      "timeSeconds": 600,
+      "imageUrl": "https://example.com/images/step3.jpg"
+    },
+    {
+      "stepOrder": 4,
+      "description": "Batir los huevos con el queso parmesano rallado",
+      "timeSeconds": 180,
+      "imageUrl": "https://example.com/images/step4.jpg"
+    },
+    {
+      "stepOrder": 5,
+      "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+      "timeSeconds": 240,
+      "imageUrl": "https://example.com/images/step5.jpg"
+    },
+    {
+      "stepOrder": 6,
+      "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+      "timeSeconds": 60,
+      "imageUrl": null
     }
   ]
 }
@@ -424,82 +434,7 @@ Content-Type: application/json
 
 **Respuesta Exitosa:**
 ```json
-{
-  "id": 1,
-  "title": "Tacos al Pastor",
-  "shortDescription": "Tacos mexicanos tradicionales con carne de cerdo marinada",
-  "servings": 4,
-  "totalTimeMin": 152,
-  "difficulty": "Media",
-  "license": {
-    "id": 1,
-    "name": "Creative Commons BY-SA 4.0",
-    "urlImage": "https://creativecommons.org/licenses/by-sa/4.0/"
-  },
-  "categories": [
-    {
-      "id": 2,
-      "name": "Almuerzo"
-    },
-    {
-      "id": 3,
-      "name": "Cena"
-    }
-  ],
-  "flavors": [
-    {
-      "id": 1,
-      "name": "Salado"
-    },
-    {
-      "id": 3,
-      "name": "Picante"
-    }
-  ],
-  "images": [
-    {
-      "id": 1,
-      "imageUrl": "https://ejemplo.com/images/tacos-principal.jpg",
-      "licenseName": "Imagen principal de tacos"
-    },
-    {
-      "id": 2,
-      "imageUrl": "https://ejemplo.com/images/tacos-lateral.jpg",
-      "licenseName": "Vista lateral"
-    }
-  ],
-  "ingredients": [
-    {
-      "id": 1,
-      "name": "Carne de cerdo",
-      "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg",
-      "measurementName": "Masa"
-    }
-  ],
-  "steps": [
-    {
-      "id": 1,
-      "stepOrder": 1,
-      "description": "Marinar la carne con especias durante 2 horas",
-      "timeSeconds": 7200,
-      "imageUrl": "https://ejemplo.com/images/step1-marinado.jpg"
-    },
-    {
-      "id": 2,
-      "stepOrder": 2,
-      "description": "Asar la carne en trompo o sartén hasta que esté dorada",
-      "timeSeconds": 1800,
-      "imageUrl": "https://ejemplo.com/images/step2-asado.jpg"
-    },
-    {
-      "id": 3,
-      "stepOrder": 3,
-      "description": "Calentar las tortillas y servir con cebolla, cilantro y piña",
-      "timeSeconds": 300,
-      "imageUrl": "https://ejemplo.com/images/step3-servir.jpg"
-    }
-  ]
-}
+pendiente
 ```
 
 ---
@@ -667,8 +602,7 @@ Content-Type: application/json
 ```json
 {
   "name": "Tomate",
-  "imageUrl": "https://ejemplo.com/images/tomate.jpg",
-  "measurementId": 2
+  "imageUrl": "https://ejemplo.com/images/tomate.jpg"
 }
 ```
 
@@ -678,7 +612,6 @@ Content-Type: application/json
   "id": 10,
   "name": "Tomate",
   "imageUrl": "https://ejemplo.com/images/tomate.jpg",
-  "measurementName": "Masa"
 }
 ```
 
@@ -696,14 +629,12 @@ GET /ingredients
   {
     "id": 1,
     "name": "Carne de cerdo",
-    "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg",
-    "measurementName": "Masa"
+    "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg"
   },
   {
     "id": 2,
     "name": "Cebolla",
-    "imageUrl": "https://ejemplo.com/ingredients/cebolla.jpg",
-    "measurementName": "Masa"
+    "imageUrl": "https://ejemplo.com/ingredients/cebolla.jpg"
   }
 ]
 ```
@@ -726,8 +657,7 @@ GET /ingredients/1
 {
   "id": 1,
   "name": "Carne de cerdo",
-  "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg",
-  "measurementName": "Masa"
+  "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg"
 }
 ```
 
@@ -744,8 +674,7 @@ Content-Type: application/json
 ```json
 {
   "name": "Carne de cerdo orgánica",
-  "imageUrl": "https://ejemplo.com/ingredients/cerdo-organico.jpg",
-  "measurementId": 2
+  "imageUrl": "https://ejemplo.com/ingredients/cerdo-organico.jpg"
 }
 ```
 
@@ -754,8 +683,7 @@ Content-Type: application/json
 {
   "id": 1,
   "name": "Carne de cerdo orgánica",
-  "imageUrl": "https://ejemplo.com/ingredients/cerdo-organico.jpg",
-  "measurementName": "Masa"
+  "imageUrl": "https://ejemplo.com/ingredients/cerdo-organico.jpg"
 }
 ```
 
