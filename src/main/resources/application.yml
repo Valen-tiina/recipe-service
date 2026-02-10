@@ -2,21 +2,25 @@ spring:
   application:
     name: recipe-service
   cloud:
-    enabled: true
+    enabled: false
     consul:
       enabled: false
-      host: consul
+      # host: consul
+      host: localhost
       port: ${SPRING_CLOUD_CONSUL_PORT:8500}
       discovery:
-        register: true
+        register: false
         instance-id: recipe-service-${server.port}
         service-name: recipe-service
         health-check-path: /actuator/health
         health-check-interval: 10s
   datasource:
-    url: jdbc:mysql://localhost:3306/recipe_service?useSSL=false&serverTimezone=UTC
+    # url: jdbc:mysql://zaboradb.mysql.database.azure.com:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
+    # username: zabora
+    # password: z@bora08
+    url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
     username: root
-    password: 2006
+    password: Yulia280719**
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
