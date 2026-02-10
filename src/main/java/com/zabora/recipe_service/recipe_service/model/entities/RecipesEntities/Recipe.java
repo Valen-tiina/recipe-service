@@ -14,6 +14,8 @@ import java.util.Set;
 @Table(name = "recipes")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@Builder
+
 public class Recipe {
 
     @Id

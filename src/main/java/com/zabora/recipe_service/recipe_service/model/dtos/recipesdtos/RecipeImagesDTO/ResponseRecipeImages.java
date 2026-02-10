@@ -2,7 +2,11 @@ package com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipeIm
 
 public record ResponseRecipeImages(
         Integer id,
-        String name,
-        String urlImage
+        String imageUrl,
+        String altText,
+        Integer position,
+        Integer licenseId,
+        String licenseName,
+        String licenseUrl
 ) {
 }

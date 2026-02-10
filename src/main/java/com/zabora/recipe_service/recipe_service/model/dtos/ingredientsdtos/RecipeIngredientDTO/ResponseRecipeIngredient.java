@@ -5,6 +5,7 @@ import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.UnitR
 public record ResponseRecipeIngredient(
         Integer id,
         String ingredientName,
+        String ingredientImageUrl,
         Double quantity,
         UnitResponse unit
 ) {

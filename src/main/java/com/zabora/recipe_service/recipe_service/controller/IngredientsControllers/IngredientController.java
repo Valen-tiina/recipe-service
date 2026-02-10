@@ -3,14 +3,16 @@ import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingre
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.CreateIngredient;
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.UpdateIngredient;
 import com.zabora.recipe_service.recipe_service.service.IngredientsServices.IngredientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/ingredients")
+@RequestMapping("/ingredient")
 public class IngredientController {
 
     private final IngredientService ingredientService;
@@ -21,8 +23,9 @@ public class IngredientController {
 
 
     @PostMapping
-    public ResponseEntity<ResponseIngredient> createIngredient(@RequestBody CreateIngredient dto) {
-        return ResponseEntity.ok(ingredientService.createIngredient(dto));
+    public ResponseEntity<ResponseIngredient> createIngredient(@Valid @RequestBody CreateIngredient dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ingredientService.createIngredient(dto));
     }
 
     @GetMapping("/{id}")

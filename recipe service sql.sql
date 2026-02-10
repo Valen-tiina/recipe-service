@@ -14,7 +14,7 @@ create table licenses_recipe(
 create table recipes (
                          ID int auto_increment primary key,
                          title varchar(100) not null,
-                         short_desc varchar(255) not null,
+                         short_desc varchar(600) not null,
                          total_time_min int,
                          difficulty_id int,
                          servings int not null,
@@ -27,7 +27,6 @@ create table ingredients (
                              ID int auto_increment primary key,
                              name_ing varchar (100) not null,
                              image_url varchar(150) not null,
-                             measurement_id int not null,
                              constraint fk_ing_measure foreign key (measurement_id)
                                  references measurement(ID)
                                  on delete cascade on update cascade
@@ -59,13 +58,11 @@ create table licenses_img(
 create table steps (
                        ID int auto_increment primary key,
                        recipe_id int not null,
-                       step_template_id int,
                        step_order int not null,
                        description_step varchar(255),
                        time_seconds int,
                        image_url varchar(150),
-                       constraint fk_step_recipe foreign key (recipe_id) references recipes(ID)on delete cascade on update cascade,
-                       FOREIGN KEY (step_template_id) REFERENCES step_templates(id)
+                       constraint fk_step_recipe foreign key (recipe_id) references recipes(ID)on delete cascade on update cascade
 )ENGINE=InnoDB;
 
 /*TABLAS PUENTE (RELACIONES MUCHOS A MUCHOS)*/

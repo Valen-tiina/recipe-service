@@ -24,8 +24,8 @@ public class RecipeImage {
     @Column(name = "alt_text", length = 100)
     private String altText;
 
-    @Column(name = "position")
-    private Integer position = 0;
+    @Column(name = "position", nullable = false)
+    private Integer position ;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "license_id")

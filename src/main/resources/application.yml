@@ -4,7 +4,7 @@ spring:
   cloud:
     enabled: true
     consul:
-      enabled: true
+      enabled: false
       host: consul
       port: ${SPRING_CLOUD_CONSUL_PORT:8500}
       discovery:
@@ -14,9 +14,9 @@ spring:
         health-check-path: /actuator/health
         health-check-interval: 10s
   datasource:
-    url: jdbc:mysql://zaboradb.mysql.database.azure.com:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-    username: zabora
-    password: z@bora08
+    url: jdbc:mysql://localhost:3306/recipe_service?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 2006
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

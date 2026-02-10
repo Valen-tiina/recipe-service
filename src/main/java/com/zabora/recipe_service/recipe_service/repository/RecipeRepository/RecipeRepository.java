@@ -1,11 +1,48 @@
 package com.zabora.recipe_service.recipe_service.repository.RecipeRepository;
 
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
+    Page<Recipe> findByTitleContainingIgnoreCase(String title, Pageable pageable);
     List<Recipe> findByTitleContainingIgnoreCase(String title);
-    List<Recipe> findByIngredientsIngredientNameContainingIgnoreCase(String ingredient);
+    @Query("""
+        SELECT DISTINCT r FROM Recipe r
+        LEFT JOIN FETCH r.ingredients ri
+        LEFT JOIN FETCH ri.ingredient i
+        WHERE LOWER(i.name) LIKE LOWER(CONCAT('%', :ingredientName, '%'))
+    """)
+    List<Recipe> findByIngredientNameContaining(@Param("ingredientName") String ingredientName);
+
+    @Query("""
+        SELECT DISTINCT r FROM Recipe r
+        LEFT JOIN FETCH r.ingredients ri
+        LEFT JOIN FETCH ri.ingredient
+        LEFT JOIN FETCH ri.unit u
+        LEFT JOIN FETCH u.measurement
+        LEFT JOIN FETCH r.steps
+        LEFT JOIN FETCH r.images img
+        LEFT JOIN FETCH img.license
+        LEFT JOIN FETCH r.categories
+        LEFT JOIN FETCH r.flavors
+        LEFT JOIN FETCH r.difficulty
+        LEFT JOIN FETCH r.license
+        WHERE r.id = :id
+    """)
+    Optional<Recipe> findByIdWithAllRelations(@Param("id") Integer id);
+    List<Recipe> findByTotalTimeMinLessThanEqual(Integer maxTime);
+    Page<Recipe> findByCategoriesIdIn(Set<Integer> categoryIds, Pageable pageable);
+    Page<Recipe> findByDifficultyId(Integer difficultyId, Pageable pageable);
+
+
+    @Query("SELECT r FROM Recipe r JOIN r.categories c WHERE c.id = :categoryId")
+    List<Recipe> findByCategoryId(@Param("categoryId") Integer categoryId);
 }

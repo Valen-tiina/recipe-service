@@ -2,7 +2,9 @@ package com.zabora.recipe_service.recipe_service.controller.RecipesControllers;
 
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.CreateRecipe;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.UpdateRecipes;
 import com.zabora.recipe_service.recipe_service.service.RecipesServices.RecipeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,13 @@ public class RecipeController {
         ResponseRecipes createdRecipe = recipeService.createRecipe(dto);
         return ResponseEntity.ok(createdRecipe);
     }
-
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseRecipes> updateRecipe(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateRecipes dto
+    ) {
+        return ResponseEntity.ok(recipeService.updateRecipe(id, dto));
+    }
     @GetMapping
     public ResponseEntity<List<ResponseRecipes>> getAllRecipes() {
         List<ResponseRecipes> recipes = recipeService.getAllRecipes();
@@ -54,4 +62,14 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.searchRecipesByIngredient(ingredient));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/todayMeal")
+    public ResponseEntity<List<ResponseRecipes>> getRecipesOfTheDay() {
+        return ResponseEntity.ok(recipeService.getRecipesOfTheDay());
+    }
 }

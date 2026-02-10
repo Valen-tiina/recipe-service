@@ -2,7 +2,10 @@ package com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipeIm
 
 public record UpdateRecipeImages(
         Integer id,
-        String name,
-        String urlImage
+        String imageUrl,
+        String altText,
+        Integer position,
+        String licenseName,
+        String licenseUrl
 ) {
 }

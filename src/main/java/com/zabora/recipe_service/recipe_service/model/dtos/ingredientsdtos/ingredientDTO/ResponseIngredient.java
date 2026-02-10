@@ -3,7 +3,5 @@ package com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingr
 public record ResponseIngredient(
         Integer id,
         String name,
-        String imageUrl,
-        String measurementName
-) {
+        String imageUrl) {
 }

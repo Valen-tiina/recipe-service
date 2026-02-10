@@ -4,4 +4,5 @@ import com.zabora.recipe_service.recipe_service.model.entities.IngredientsEntiti
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Integer> {
+    boolean existsByNameIgnoreCase(String name);
 }

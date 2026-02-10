@@ -6,5 +6,5 @@ public record ResponseSteps(
         Integer stepOrder,
         String description,
         Integer timeSeconds,
-        String customImageUrl) {
+        String imageUrl) {
 }
