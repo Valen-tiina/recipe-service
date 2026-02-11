@@ -359,147 +359,12 @@ Content-Type: application/json
 
 **Body Completo:**
 ```json
-{
-  "title": "Tacos al Pastor",
-  "shortDescription": "Tacos mexicanos tradicionales con carne de cerdo marinada",
-  "servings": 4,
-  "difficultyId": 2,
-  "licenseName": "Creative Commons BY-SA 4.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-  "categoryIds": [2, 3],
-  "flavorIds": [1, 3],
-  "ingredients": [
-    {
-      "ingredientId": 1,
-      "quantity": 500,
-      "unitId": 9
-    },
-    {
-      "ingredientId": 2,
-      "quantity": 2,
-      "unitId": 4
-    },
-    {
-      "ingredientId": 3,
-      "quantity": 1,
-      "unitId": 6
-    }
-  ],
-  "images": [
-    {
-      "name": "Imagen principal de tacos",
-      "imageUrl": "https://ejemplo.com/images/tacos-principal.jpg",
-      "altText": "Plato de tacos al pastor servidos",
-      "position": 1
-    },
-    {
-      "name": "Vista lateral",
-      "imageUrl": "https://ejemplo.com/images/tacos-lateral.jpg",
-      "altText": "Vista lateral de los tacos",
-      "position": 2
-    }
-  ],
-  "steps": [
-    {
-      "stepOrder": 1,
-      "description": "Marinar la carne con especias durante 2 horas",
-      "timeSeconds": 7200,
-      "imageUrl": "https://ejemplo.com/images/step1-marinado.jpg"
-    },
-    {
-      "stepOrder": 2,
-      "description": "Asar la carne en trompo o sartén hasta que esté dorada",
-      "timeSeconds": 1800,
-      "imageUrl": "https://ejemplo.com/images/step2-asado.jpg"
-    },
-    {
-      "stepOrder": 3,
-      "description": "Calentar las tortillas y servir con cebolla, cilantro y piña",
-      "timeSeconds": 300,
-      "imageUrl": "https://ejemplo.com/images/step3-servir.jpg"
-    }
-  ]
-}
+
 ```
 
 **Respuesta Exitosa:**
 ```json
-{
-  "id": 1,
-  "title": "Tacos al Pastor",
-  "shortDescription": "Tacos mexicanos tradicionales con carne de cerdo marinada",
-  "servings": 4,
-  "totalTimeMin": 152,
-  "difficulty": "Media",
-  "license": {
-    "id": 1,
-    "name": "Creative Commons BY-SA 4.0",
-    "urlImage": "https://creativecommons.org/licenses/by-sa/4.0/"
-  },
-  "categories": [
-    {
-      "id": 2,
-      "name": "Almuerzo"
-    },
-    {
-      "id": 3,
-      "name": "Cena"
-    }
-  ],
-  "flavors": [
-    {
-      "id": 1,
-      "name": "Salado"
-    },
-    {
-      "id": 3,
-      "name": "Picante"
-    }
-  ],
-  "images": [
-    {
-      "id": 1,
-      "imageUrl": "https://ejemplo.com/images/tacos-principal.jpg",
-      "licenseName": "Imagen principal de tacos"
-    },
-    {
-      "id": 2,
-      "imageUrl": "https://ejemplo.com/images/tacos-lateral.jpg",
-      "licenseName": "Vista lateral"
-    }
-  ],
-  "ingredients": [
-    {
-      "id": 1,
-      "name": "Carne de cerdo",
-      "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg",
-      "measurementName": "Masa"
-    }
-  ],
-  "steps": [
-    {
-      "id": 1,
-      "stepOrder": 1,
-      "description": "Marinar la carne con especias durante 2 horas",
-      "timeSeconds": 7200,
-      "imageUrl": "https://ejemplo.com/images/step1-marinado.jpg"
-    },
-    {
-      "id": 2,
-      "stepOrder": 2,
-      "description": "Asar la carne en trompo o sartén hasta que esté dorada",
-      "timeSeconds": 1800,
-      "imageUrl": "https://ejemplo.com/images/step2-asado.jpg"
-    },
-    {
-      "id": 3,
-      "stepOrder": 3,
-      "description": "Calentar las tortillas y servir con cebolla, cilantro y piña",
-      "timeSeconds": 300,
-      "imageUrl": "https://ejemplo.com/images/step3-servir.jpg"
-    }
-  ]
-}
+
 ```
 
 ---
@@ -512,22 +377,7 @@ GET /api/recipes
 
 **Respuesta:**
 ```json
-[
-  {
-    "id": 1,
-    "title": "Tacos al Pastor",
-    "shortDescription": "Tacos mexicanos tradicionales...",
-    "servings": 4,
-    "totalTimeMin": 152,
-    "difficulty": "Media",
-    ...
-  },
-  {
-    "id": 2,
-    "title": "Pancakes Americanos",
-    ...
-  }
-]
+
 ```
 
 ---
@@ -563,23 +413,7 @@ GET /api/recipes/multiple?ids=1,3,5
 
 **Respuesta:**
 ```json
-[
-  {
-    "id": 1,
-    "title": "Tacos al Pastor",
-    ...
-  },
-  {
-    "id": 3,
-    "title": "Ensalada César",
-    ...
-  },
-  {
-    "id": 5,
-    "title": "Brownies de Chocolate",
-    ...
-  }
-]
+
 ```
 
 **Nota:** Las recetas se devuelven en el mismo orden que los IDs solicitados.

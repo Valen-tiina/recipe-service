@@ -53,14 +53,14 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search/")
     public ResponseEntity<List<ResponseRecipes>> searchRecipesByTitle(
             @RequestParam String title,
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
         return ResponseEntity.ok(recipeService.searchRecipesByTitle(title, role));
     }
 
-    @GetMapping("/search/ingredient")
+    @GetMapping("/search/ingredient/")
     public ResponseEntity<List<ResponseRecipes>> searchRecipesByIngredient(
             @RequestParam String ingredient,
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role
