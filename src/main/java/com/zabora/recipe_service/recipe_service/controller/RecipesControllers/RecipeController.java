@@ -5,11 +5,11 @@ import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDT
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.UpdateRecipes;
 import com.zabora.recipe_service.recipe_service.service.RecipesServices.RecipeService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -26,6 +26,7 @@ public class RecipeController {
         ResponseRecipes createdRecipe = recipeService.createRecipe(dto);
         return ResponseEntity.ok(createdRecipe);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<ResponseRecipes> updateRecipe(
             @PathVariable Integer id,
@@ -33,9 +34,11 @@ public class RecipeController {
     ) {
         return ResponseEntity.ok(recipeService.updateRecipe(id, dto));
     }
+
     @GetMapping
-    public ResponseEntity<List<ResponseRecipes>> getAllRecipes() {
-        List<ResponseRecipes> recipes = recipeService.getAllRecipes();
+    public ResponseEntity<List<ResponseRecipes>> getAllRecipes(
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
+        List<ResponseRecipes> recipes = recipeService.getAllRecipes(role);
         return ResponseEntity.ok(recipes);
     }
 
@@ -51,15 +54,18 @@ public class RecipeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ResponseRecipes>> searchRecipesByTitle(@RequestParam String title) {
-        return ResponseEntity.ok(recipeService.searchRecipesByTitle(title));
+    public ResponseEntity<List<ResponseRecipes>> searchRecipesByTitle(
+            @RequestParam String title,
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
+        return ResponseEntity.ok(recipeService.searchRecipesByTitle(title, role));
     }
 
     @GetMapping("/search/ingredient")
     public ResponseEntity<List<ResponseRecipes>> searchRecipesByIngredient(
-            @RequestParam String ingredient
+            @RequestParam String ingredient,
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role
     ) {
-        return ResponseEntity.ok(recipeService.searchRecipesByIngredient(ingredient));
+        return ResponseEntity.ok(recipeService.searchRecipesByIngredient(ingredient, role));
     }
 
     @DeleteMapping("/{id}")
@@ -68,8 +74,24 @@ public class RecipeController {
         return ResponseEntity.noContent().build();
     }
 
+    // Estos 4 métodos NO tienen límite por rol
     @GetMapping("/todayMeal")
-    public ResponseEntity<List<ResponseRecipes>> getRecipesOfTheDay() {
+    public ResponseEntity<Map<String, List<ResponseRecipes>>> getRecipesOfTheDay() {
         return ResponseEntity.ok(recipeService.getRecipesOfTheDay());
+    }
+
+    @GetMapping("/breakfast")
+    public ResponseEntity<List<ResponseRecipes>> getBreakfastRecipes() {
+        return ResponseEntity.ok(recipeService.getBreakfastRecipes());
+    }
+
+    @GetMapping("/lunch")
+    public ResponseEntity<List<ResponseRecipes>> getLunchRecipes() {
+        return ResponseEntity.ok(recipeService.getLunchRecipes());
+    }
+
+    @GetMapping("/dinner")
+    public ResponseEntity<List<ResponseRecipes>> getDinnerRecipes() {
+        return ResponseEntity.ok(recipeService.getDinnerRecipes());
     }
 }

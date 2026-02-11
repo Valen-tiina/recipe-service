@@ -20,7 +20,7 @@ spring:
     # password: z@bora08
     url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
     username: root
-    password: Yulia280719**
+    password: 2006
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

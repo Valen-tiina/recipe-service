@@ -14,12 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/ingredient")
 public class IngredientController {
+    @Autowired
+    private IngredientService ingredientService;
 
-    private final IngredientService ingredientService;
-
-    public IngredientController(IngredientService ingredientService) {
-        this.ingredientService = ingredientService;
-    }
 
 
     @PostMapping

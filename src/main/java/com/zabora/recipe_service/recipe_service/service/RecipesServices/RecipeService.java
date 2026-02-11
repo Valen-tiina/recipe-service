@@ -444,13 +444,32 @@ public class RecipeService {
 
         recipe.setTotalTimeMin(totalTimeSeconds / 60);
     }
+    // limitar por rol
+    private List<ResponseRecipes> limitRecipesByRole(List<ResponseRecipes> recipes, String role) {
+        int limit = getRecipeLimitByRole(role);
+
+        return recipes.stream()
+                .limit(limit)
+                .toList();
+    }
+    private int getRecipeLimitByRole(String role) {
+        return switch (role) {
+            case "ROLE_ADMIN" -> Integer.MAX_VALUE; // Sin límite
+            case "ROLE_PREMIUM" -> 3;
+            case "ROLE_USER" -> 2; // Usuario registrado
+            case "ROLE_GUEST" -> 1; // Invitado
+            default -> 1;
+        };
+    }
 
     @Transactional(readOnly = true)
-    public List<ResponseRecipes> getAllRecipes() {
-        return recipeRepository.findAll()
+    public List<ResponseRecipes> getAllRecipes(String role) {
+        var allRecipes = recipeRepository.findAll()
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+
+        return limitRecipesByRole(allRecipes, role);
     }
 
     @Transactional(readOnly = true)
@@ -476,30 +495,35 @@ public class RecipeService {
                 .toList();
     }
 
+
     @Transactional(readOnly = true)
-    public List<ResponseRecipes> searchRecipesByTitle(String title) {
+    public List<ResponseRecipes> searchRecipesByTitle(String title, String role) {
         var recipes = recipeRepository.findByTitleContainingIgnoreCase(title);
 
         if (recipes.isEmpty()) {
             throw new RuntimeException("No se encontraron recetas con ese título");
         }
 
-        return recipes.stream()
+        var recipesResponse = recipes.stream()
                 .map(this::mapToResponse)
                 .toList();
+
+        return limitRecipesByRole(recipesResponse, role);
     }
 
     @Transactional(readOnly = true)
-    public List<ResponseRecipes> searchRecipesByIngredient(String ingredient) {
+    public List<ResponseRecipes> searchRecipesByIngredient(String ingredient, String role) {
         var recipes = recipeRepository.findByIngredientNameContaining(ingredient);
 
         if (recipes.isEmpty()) {
             throw new RuntimeException("No se encontraron recetas con ese ingrediente");
         }
 
-        return recipes.stream()
+        var recipesResponse = recipes.stream()
                 .map(this::mapToResponse)
                 .toList();
+
+        return limitRecipesByRole(recipesResponse, role);
     }
 // DELETE - ELIMINAR RECETA
 
@@ -512,15 +536,7 @@ public class RecipeService {
     }
 
     //menu del dia
-    public List<ResponseRecipes> getRecipesOfTheDay() {
-        return List.of(
-                getRandomRecipeByCategory(1), // Desayuno
-                getRandomRecipeByCategory(2), // Almuerzo
-                getRandomRecipeByCategory(3)  // Cena
-        );
-    }
-
-    private ResponseRecipes getRandomRecipeByCategory(Integer categoryId) {
+    private List<ResponseRecipes> getRandomRecipesByCategory(Integer categoryId, int count) {
         var recipes = recipeRepository.findByCategoryId(categoryId);
 
         if (recipes.isEmpty()) {
@@ -528,8 +544,44 @@ public class RecipeService {
         }
 
         var random = new Random();
-        var randomRecipe = recipes.get(random.nextInt(recipes.size()));
+        var selectedRecipes = new ArrayList<ResponseRecipes>();
 
-        return mapToResponse(randomRecipe);
+        int recipesToSelect = Math.min(count, recipes.size());
+
+        var availableRecipes = new ArrayList<>(recipes);
+
+        for (int i = 0; i < recipesToSelect; i++) {
+            int randomIndex = random.nextInt(availableRecipes.size());
+            var selectedRecipe = availableRecipes.remove(randomIndex);
+            selectedRecipes.add(mapToResponse(selectedRecipe));
+        }
+
+        return selectedRecipes;
+    }
+
+    public List<ResponseRecipes> getBreakfastRecipes() {
+        Integer BREAKFAST_CATEGORY_ID = 1;
+        return getRandomRecipesByCategory(BREAKFAST_CATEGORY_ID, 3);
+    }
+
+    public List<ResponseRecipes> getLunchRecipes() {
+        Integer LUNCH_CATEGORY_ID = 2;
+        return getRandomRecipesByCategory(LUNCH_CATEGORY_ID, 3);
+    }
+
+    public List<ResponseRecipes> getDinnerRecipes() {
+        Integer DINNER_CATEGORY_ID = 3;
+        return getRandomRecipesByCategory(DINNER_CATEGORY_ID, 3);
+    }
+
+    // daily recipes 3 per day
+    public Map<String, List<ResponseRecipes>> getRecipesOfTheDay() {
+        var recipesOfDay = new HashMap<String, List<ResponseRecipes>>();
+
+        recipesOfDay.put("breakfast", getBreakfastRecipes());
+        recipesOfDay.put("lunch", getLunchRecipes());
+        recipesOfDay.put("dinner", getDinnerRecipes());
+
+        return recipesOfDay;
     }
 }

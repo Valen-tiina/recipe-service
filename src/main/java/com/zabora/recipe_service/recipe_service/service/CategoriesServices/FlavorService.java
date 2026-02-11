@@ -16,9 +16,4 @@ public class FlavorService {
         return flavorRepo.findAll();
     }
 
-    public Flavor findById(Integer id) {
-        return flavorRepo
-                .findById(id)
-                .orElseThrow(()-> new RuntimeException("El sabor con ID " + id + " no existe"));
-    }
 }
