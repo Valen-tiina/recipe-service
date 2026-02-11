@@ -359,12 +359,190 @@ Content-Type: application/json
 
 **Body Completo:**
 ```json
-
+{
+  "title": "Pasta Carbonara",
+  "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
+  "servings": 4,
+  "difficultyId": 2,
+  "licenseName": "Creative Commons BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "categoryIds": [2, 3],
+  "flavorIds": [1],
+  "ingredients": [
+    {
+      "ingredientId": 1,
+      "quantity": 400,
+      "unitId": 9
+    }
+  ],
+  "images": [
+    {
+      "imageUrl": "https://example.com/images/carbonara-main.jpg",
+      "altText": "Plato de pasta carbonara servido",
+      "position": 1,
+      "licenseName": "Unsplash License",
+      "licenseUrl": "https://unsplash.com/license"
+    },
+    {
+      "imageUrl": "https://example.com/images/carbonara-process.jpg",
+      "altText": "Proceso de preparación de la carbonara",
+      "position": 2,
+      "licenseName": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    }
+  ],
+  "steps": [
+    {
+      "stepOrder": 1,
+      "description": "Poner a hervir agua con sal en una olla grande",
+      "timeSeconds": 300,
+      "imageUrl": "https://example.com/images/step1.jpg"
+    },
+    {
+      "stepOrder": 2,
+      "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+      "timeSeconds": 420,
+      "imageUrl": "https://example.com/images/step2.jpg"
+    },
+    {
+      "stepOrder": 3,
+      "description": "Cocinar la pasta según las instrucciones del paquete",
+      "timeSeconds": 600,
+      "imageUrl": "https://example.com/images/step3.jpg"
+    },
+    {
+      "stepOrder": 4,
+      "description": "Batir los huevos con el queso parmesano rallado",
+      "timeSeconds": 180,
+      "imageUrl": "https://example.com/images/step4.jpg"
+    },
+    {
+      "stepOrder": 5,
+      "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+      "timeSeconds": 240,
+      "imageUrl": "https://example.com/images/step5.jpg"
+    },
+    {
+      "stepOrder": 6,
+      "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+      "timeSeconds": 60,
+      "imageUrl": null
+    }
+  ]
+}
 ```
 
 **Respuesta Exitosa:**
 ```json
-
+{
+    "id": 1,
+    "title": "Pasta Carbonara",
+    "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
+    "servings": 4,
+    "totalTimeMin": 30,
+    "difficulty": "Media",
+    "license": {
+        "id": 2,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    "categories": [
+        {
+            "id": 2,
+            "name": "Almuerzo"
+        },
+        {
+            "id": 3,
+            "name": "Cena"
+        }
+    ],
+    "flavors": [
+        {
+            "id": 1,
+            "name": "Salado"
+        }
+    ],
+    "images": [
+        {
+            "id": 1,
+            "imageUrl": "https://example.com/images/carbonara-main.jpg",
+            "altText": "Plato de pasta carbonara servido",
+            "position": 1,
+            "licenseId": 2,
+            "licenseName": "Unsplash License",
+            "licenseUrl": "https://unsplash.com/license"
+        },
+        {
+            "id": 2,
+            "imageUrl": "https://example.com/images/carbonara-process.jpg",
+            "altText": "Proceso de preparación de la carbonara",
+            "position": 2,
+            "licenseId": 1,
+            "licenseName": "Pexels License",
+            "licenseUrl": "https://www.pexels.com/license/"
+        }
+    ],
+    "ingredients": [
+        {
+            "id": 1,
+            "ingredientName": "Tomate",
+            "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+            "quantity": 400.0,
+            "unit": {
+                "id": 9,
+                "name": "Gramo",
+                "measurement": {
+                    "id": 2,
+                    "name": "Masa"
+                }
+            }
+        }
+    ],
+    "steps": [
+        {
+            "id": 1,
+            "stepOrder": 2,
+            "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+            "timeSeconds": 420,
+            "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+            "id": 2,
+            "stepOrder": 5,
+            "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+            "timeSeconds": 240,
+            "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+            "id": 3,
+            "stepOrder": 3,
+            "description": "Cocinar la pasta según las instrucciones del paquete",
+            "timeSeconds": 600,
+            "imageUrl": "https://example.com/images/step3.jpg"
+        },
+        {
+            "id": 4,
+            "stepOrder": 1,
+            "description": "Poner a hervir agua con sal en una olla grande",
+            "timeSeconds": 300,
+            "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+            "id": 5,
+            "stepOrder": 4,
+            "description": "Batir los huevos con el queso parmesano rallado",
+            "timeSeconds": 180,
+            "imageUrl": "https://example.com/images/step4.jpg"
+        },
+        {
+            "id": 6,
+            "stepOrder": 6,
+            "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+            "timeSeconds": 60,
+            "imageUrl": null
+        }
+    ]
+}
 ```
 
 ---
@@ -377,7 +555,222 @@ GET /api/recipes
 
 **Respuesta:**
 ```json
-
+[
+    {
+        "id": 1,
+        "title": "Pasta Carbonara",
+        "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 2,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 2,
+                "name": "Almuerzo"
+            },
+            {
+                "id": 3,
+                "name": "Cena"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 1,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 2,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            },
+            {
+                "id": 2,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 1,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 1,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 2,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            },
+            {
+                "id": 5,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 6,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 4,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 1,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 3,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Sudado de pollo",
+        "shortDescription": "Delicioso sudado de pollo",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 3,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 2,
+                "name": "Almuerzo"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 3,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 4,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            },
+            {
+                "id": 4,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 3,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 2,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 7,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 11,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 8,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 10,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 9,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 12,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            }
+        ]
+    }
+]
 ```
 
 ---
@@ -435,14 +828,113 @@ GET /api/recipes/search?title=tacos
 ```json
 [
   {
-    "id": 1,
-    "title": "Tacos al Pastor",
-    ...
-  },
-  {
-    "id": 15,
-    "title": "Tacos de Pescado",
-    ...
+    "id": 9,
+    "title": "tacos mexicanos",
+    "shortDescription": "Deliciosos tacos mexicanos picantes",
+    "servings": 4,
+    "totalTimeMin": 30,
+    "difficulty": "Media",
+    "license": {
+      "id": 10,
+      "name": "Creative Commons BY-SA 4.0",
+      "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    "categories": [
+      {
+        "id": 3,
+        "name": "Cena"
+      },
+      {
+        "id": 2,
+        "name": "Almuerzo"
+      }
+    ],
+    "flavors": [
+      {
+        "id": 1,
+        "name": "Salado"
+      }
+    ],
+    "images": [
+      {
+        "id": 17,
+        "imageUrl": "https://example.com/images/carbonara-process.jpg",
+        "altText": "Proceso de preparación de la carbonara",
+        "position": 2,
+        "licenseId": 17,
+        "licenseName": "Pexels License",
+        "licenseUrl": "https://www.pexels.com/license/"
+      },
+      {
+        "id": 18,
+        "imageUrl": "https://example.com/images/carbonara-main.jpg",
+        "altText": "Plato de pasta carbonara servido",
+        "position": 1,
+        "licenseId": 18,
+        "licenseName": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    ],
+    "ingredients": [
+      {
+        "id": 9,
+        "ingredientName": "Tomate",
+        "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+        "quantity": 400.0,
+        "unit": {
+          "id": 9,
+          "name": "Gramo",
+          "measurement": {
+            "id": 2,
+            "name": "Masa"
+          }
+        }
+      }
+    ],
+    "steps": [
+      {
+        "id": 53,
+        "stepOrder": 6,
+        "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+        "timeSeconds": 60,
+        "imageUrl": null
+      },
+      {
+        "id": 49,
+        "stepOrder": 2,
+        "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+        "timeSeconds": 420,
+        "imageUrl": "https://example.com/images/step2.jpg"
+      },
+      {
+        "id": 52,
+        "stepOrder": 4,
+        "description": "Batir los huevos con el queso parmesano rallado",
+        "timeSeconds": 180,
+        "imageUrl": "https://example.com/images/step4.jpg"
+      },
+      {
+        "id": 51,
+        "stepOrder": 3,
+        "description": "Cocinar la pasta según las instrucciones del paquete",
+        "timeSeconds": 600,
+        "imageUrl": "https://example.com/images/step3.jpg"
+      },
+      {
+        "id": 50,
+        "stepOrder": 1,
+        "description": "Poner a hervir agua con sal en una olla grande",
+        "timeSeconds": 300,
+        "imageUrl": "https://example.com/images/step1.jpg"
+      },
+      {
+        "id": 54,
+        "stepOrder": 5,
+        "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+        "timeSeconds": 240,
+        "imageUrl": "https://example.com/images/step5.jpg"
+      }
+    ]
   }
 ]
 ```
@@ -462,7 +954,7 @@ GET /api/recipes/search/ingredient?ingredient={nombre}
 
 **Ejemplo:**
 ```bash
-GET /api/recipes/search/ingredient?ingredient=pollo
+GET /api/recipes/search/ingredient?ingredient=tomate
 ```
 
 **Respuesta:**
@@ -487,7 +979,1748 @@ GET /api/recipes/search/ingredient?ingredient=pollo
 - Retorna error si no encuentra resultados
 
 ---
+### Recetas del día
 
+```http
+GET /api/recipes/todayMeal
+```
+**Respuesta:**
+```json
+{
+  "lunch": [
+    {
+      "id": 5,
+      "title": "Sudado de pollo",
+      "shortDescription": "Delicioso sudado de pollo",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 6,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 2,
+          "name": "Almuerzo"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 10,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 9,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        },
+        {
+          "id": 9,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 10,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 5,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 30,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+          "id": 26,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        },
+        {
+          "id": 25,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 28,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        },
+        {
+          "id": 27,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 29,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Sudado de pollo",
+      "shortDescription": "Delicioso sudado de pollo",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 3,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 2,
+          "name": "Almuerzo"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 4,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 3,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        },
+        {
+          "id": 3,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 4,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 2,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 7,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 10,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        },
+        {
+          "id": 11,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        },
+        {
+          "id": 9,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+          "id": 12,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 8,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "Pasta Carbonara",
+      "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 2,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 3,
+          "name": "Cena"
+        },
+        {
+          "id": 2,
+          "name": "Almuerzo"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 1,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 2,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        },
+        {
+          "id": 2,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 1,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 1,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 4,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+          "id": 2,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 3,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        },
+        {
+          "id": 6,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 1,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+          "id": 5,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        }
+      ]
+    }
+  ],
+  "breakfast": [
+    {
+      "id": 3,
+      "title": "Sudado de pollo",
+      "shortDescription": "Delicioso sudado de pollo",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 4,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "Desayuno"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 5,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 5,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        },
+        {
+          "id": 6,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 6,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 3,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 16,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        },
+        {
+          "id": 14,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 13,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 17,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+          "id": 18,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+          "id": 15,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Sudado de pollo",
+      "shortDescription": "Delicioso sudado de pollo",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 5,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "Desayuno"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 7,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 8,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        },
+        {
+          "id": 8,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 7,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 4,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 20,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 23,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+          "id": 19,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 22,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+          "id": 24,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        },
+        {
+          "id": 21,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        }
+      ]
+    }
+  ],
+  "dinner": [
+    {
+      "id": 7,
+      "title": "Sudado de pollo",
+      "shortDescription": "Delicioso sudado de pollo",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 8,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 3,
+          "name": "Cena"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 14,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 13,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        },
+        {
+          "id": 13,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 14,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 7,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 37,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+          "id": 42,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 38,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+          "id": 39,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 40,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        },
+        {
+          "id": 41,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Sudado de pollo",
+      "shortDescription": "Delicioso sudado de pollo",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 9,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 3,
+          "name": "Cena"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 15,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 15,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        },
+        {
+          "id": 16,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 16,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 8,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 46,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        },
+        {
+          "id": 44,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+          "id": 45,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+          "id": 43,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 47,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 48,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "Pasta Carbonara",
+      "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
+      "servings": 4,
+      "totalTimeMin": 30,
+      "difficulty": "Media",
+      "license": {
+        "id": 2,
+        "name": "Creative Commons BY-SA 4.0",
+        "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "categories": [
+        {
+          "id": 3,
+          "name": "Cena"
+        },
+        {
+          "id": 2,
+          "name": "Almuerzo"
+        }
+      ],
+      "flavors": [
+        {
+          "id": 1,
+          "name": "Salado"
+        }
+      ],
+      "images": [
+        {
+          "id": 1,
+          "imageUrl": "https://example.com/images/carbonara-main.jpg",
+          "altText": "Plato de pasta carbonara servido",
+          "position": 1,
+          "licenseId": 2,
+          "licenseName": "Unsplash License",
+          "licenseUrl": "https://unsplash.com/license"
+        },
+        {
+          "id": 2,
+          "imageUrl": "https://example.com/images/carbonara-process.jpg",
+          "altText": "Proceso de preparación de la carbonara",
+          "position": 2,
+          "licenseId": 1,
+          "licenseName": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/"
+        }
+      ],
+      "ingredients": [
+        {
+          "id": 1,
+          "ingredientName": "Tomate",
+          "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+          "quantity": 400.0,
+          "unit": {
+            "id": 9,
+            "name": "Gramo",
+            "measurement": {
+              "id": 2,
+              "name": "Masa"
+            }
+          }
+        }
+      ],
+      "steps": [
+        {
+          "id": 4,
+          "stepOrder": 1,
+          "description": "Poner a hervir agua con sal en una olla grande",
+          "timeSeconds": 300,
+          "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+          "id": 2,
+          "stepOrder": 5,
+          "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+          "timeSeconds": 240,
+          "imageUrl": "https://example.com/images/step5.jpg"
+        },
+        {
+          "id": 3,
+          "stepOrder": 3,
+          "description": "Cocinar la pasta según las instrucciones del paquete",
+          "timeSeconds": 600,
+          "imageUrl": "https://example.com/images/step3.jpg"
+        },
+        {
+          "id": 6,
+          "stepOrder": 6,
+          "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+          "timeSeconds": 60,
+          "imageUrl": null
+        },
+        {
+          "id": 1,
+          "stepOrder": 2,
+          "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+          "timeSeconds": 420,
+          "imageUrl": "https://example.com/images/step2.jpg"
+        },
+        {
+          "id": 5,
+          "stepOrder": 4,
+          "description": "Batir los huevos con el queso parmesano rallado",
+          "timeSeconds": 180,
+          "imageUrl": "https://example.com/images/step4.jpg"
+        }
+      ]
+    }
+  ]
+}
+```
+### Desayunos del dia
+
+```http
+GET /api/recipes/breakfast
+```
+**Respuesta:**
+```json
+[
+    {
+        "id": 3,
+        "title": "Sudado de pollo",
+        "shortDescription": "Delicioso sudado de pollo",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 4,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 1,
+                "name": "Desayuno"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 5,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 5,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            },
+            {
+                "id": 6,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 6,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 3,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 17,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 13,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 18,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 16,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 15,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 14,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Sudado de pollo",
+        "shortDescription": "Delicioso sudado de pollo",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 5,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 1,
+                "name": "Desayuno"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 7,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 8,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            },
+            {
+                "id": 8,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 7,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 4,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 24,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 21,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 20,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            },
+            {
+                "id": 19,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 22,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 23,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            }
+        ]
+    }
+]
+```
+### Almuerzos del dia
+
+```http
+GET /api/recipes/lunch
+```
+**Respuesta:**
+```json
+[
+    {
+        "id": 2,
+        "title": "Sudado de pollo",
+        "shortDescription": "Delicioso sudado de pollo",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 3,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 2,
+                "name": "Almuerzo"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 4,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 3,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            },
+            {
+                "id": 3,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 4,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 2,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 11,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 8,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 7,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 9,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 10,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 12,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "title": "Pasta Carbonara",
+        "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 2,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 3,
+                "name": "Cena"
+            },
+            {
+                "id": 2,
+                "name": "Almuerzo"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 1,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 2,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            },
+            {
+                "id": 2,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 1,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 1,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 2,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            },
+            {
+                "id": 1,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 6,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 3,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 4,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 5,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Sudado de pollo",
+        "shortDescription": "Delicioso sudado de pollo",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 7,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 2,
+                "name": "Almuerzo"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 11,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 12,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            },
+            {
+                "id": 12,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 11,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 6,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 33,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 36,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 31,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 32,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 34,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            },
+            {
+                "id": 35,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            }
+        ]
+    }
+]
+```
+### Cenas del día
+
+```http
+GET /api/recipes/dinner
+```
+**Respuesta:**
+```json
+[
+    {
+        "id": 1,
+        "title": "Pasta Carbonara",
+        "shortDescription": "Deliciosa pasta italiana con huevo, queso parmesano y panceta. Un clásico de la cocina romana que se prepara en minutos.",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 2,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 2,
+                "name": "Almuerzo"
+            },
+            {
+                "id": 3,
+                "name": "Cena"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 1,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 2,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            },
+            {
+                "id": 2,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 1,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 1,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 1,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 6,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 4,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 3,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 5,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 2,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "title": "Sudado de pollo",
+        "shortDescription": "Delicioso sudado de pollo",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 8,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 3,
+                "name": "Cena"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 13,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 14,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            },
+            {
+                "id": 14,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 13,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 7,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 41,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 37,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 42,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 40,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 39,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            },
+            {
+                "id": 38,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "title": "Sudado de pollo",
+        "shortDescription": "Delicioso sudado de pollo",
+        "servings": 4,
+        "totalTimeMin": 30,
+        "difficulty": "Media",
+        "license": {
+            "id": 9,
+            "name": "Creative Commons BY-SA 4.0",
+            "urlRecipe": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        "categories": [
+            {
+                "id": 3,
+                "name": "Cena"
+            }
+        ],
+        "flavors": [
+            {
+                "id": 1,
+                "name": "Salado"
+            }
+        ],
+        "images": [
+            {
+                "id": 15,
+                "imageUrl": "https://example.com/images/carbonara-process.jpg",
+                "altText": "Proceso de preparación de la carbonara",
+                "position": 2,
+                "licenseId": 15,
+                "licenseName": "Pexels License",
+                "licenseUrl": "https://www.pexels.com/license/"
+            },
+            {
+                "id": 16,
+                "imageUrl": "https://example.com/images/carbonara-main.jpg",
+                "altText": "Plato de pasta carbonara servido",
+                "position": 1,
+                "licenseId": 16,
+                "licenseName": "Unsplash License",
+                "licenseUrl": "https://unsplash.com/license"
+            }
+        ],
+        "ingredients": [
+            {
+                "id": 8,
+                "ingredientName": "Tomate",
+                "ingredientImageUrl": "https://ejemplo.com/images/tomate.jpg",
+                "quantity": 400.0,
+                "unit": {
+                    "id": 9,
+                    "name": "Gramo",
+                    "measurement": {
+                        "id": 2,
+                        "name": "Masa"
+                    }
+                }
+            }
+        ],
+        "steps": [
+            {
+                "id": 43,
+                "stepOrder": 6,
+                "description": "Servir inmediatamente con más queso parmesano y pimienta negra",
+                "timeSeconds": 60,
+                "imageUrl": null
+            },
+            {
+                "id": 45,
+                "stepOrder": 1,
+                "description": "Poner a hervir agua con sal en una olla grande",
+                "timeSeconds": 300,
+                "imageUrl": "https://example.com/images/step1.jpg"
+            },
+            {
+                "id": 46,
+                "stepOrder": 3,
+                "description": "Cocinar la pasta según las instrucciones del paquete",
+                "timeSeconds": 600,
+                "imageUrl": "https://example.com/images/step3.jpg"
+            },
+            {
+                "id": 44,
+                "stepOrder": 2,
+                "description": "Cocinar la panceta en una sartén hasta que esté crujiente",
+                "timeSeconds": 420,
+                "imageUrl": "https://example.com/images/step2.jpg"
+            },
+            {
+                "id": 48,
+                "stepOrder": 4,
+                "description": "Batir los huevos con el queso parmesano rallado",
+                "timeSeconds": 180,
+                "imageUrl": "https://example.com/images/step4.jpg"
+            },
+            {
+                "id": 47,
+                "stepOrder": 5,
+                "description": "Mezclar la pasta caliente con la panceta y agregar la mezcla de huevo fuera del fuego",
+                "timeSeconds": 240,
+                "imageUrl": "https://example.com/images/step5.jpg"
+            }
+        ]
+    }
+]
+```
 ## 2 Ingredientes
 
 ### Crear Ingrediente
@@ -501,18 +2734,16 @@ Content-Type: application/json
 ```json
 {
   "name": "Tomate",
-  "imageUrl": "https://ejemplo.com/images/tomate.jpg",
-  "measurementId": 2
+  "imageUrl": "https://ejemplo.com/images/tomate.jpg"
 }
 ```
 
 **Respuesta:**
 ```json
 {
-  "id": 10,
+  "id": 1,
   "name": "Tomate",
-  "imageUrl": "https://ejemplo.com/images/tomate.jpg",
-  "measurementName": "Masa"
+  "imageUrl": "https://ejemplo.com/images/tomate.jpg"
 }
 ```
 
@@ -529,15 +2760,13 @@ GET /ingredients
 [
   {
     "id": 1,
-    "name": "Carne de cerdo",
-    "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg",
-    "measurementName": "Masa"
+    "name": "Tomate",
+    "imageUrl": "https://ejemplo.com/images/tomate.jpg"
   },
   {
     "id": 2,
-    "name": "Cebolla",
-    "imageUrl": "https://ejemplo.com/ingredients/cebolla.jpg",
-    "measurementName": "Masa"
+    "name": "Arroz",
+    "imageUrl": "https://ejemplo.com/images/arroz.jpg"
   }
 ]
 ```
@@ -559,9 +2788,8 @@ GET /ingredients/1
 ```json
 {
   "id": 1,
-  "name": "Carne de cerdo",
-  "imageUrl": "https://ejemplo.com/ingredients/cerdo.jpg",
-  "measurementName": "Masa"
+  "name": "Tomate",
+  "imageUrl": "https://ejemplo.com/images/tomate.jpg"
 }
 ```
 
@@ -577,9 +2805,8 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-  "name": "Carne de cerdo orgánica",
-  "imageUrl": "https://ejemplo.com/ingredients/cerdo-organico.jpg",
-  "measurementId": 2
+  "name": "Tomate cherry",
+  "imageUrl": "https://ejemplo.com/images/tomatecherry.jpg"
 }
 ```
 
@@ -587,9 +2814,8 @@ Content-Type: application/json
 ```json
 {
   "id": 1,
-  "name": "Carne de cerdo orgánica",
-  "imageUrl": "https://ejemplo.com/ingredients/cerdo-organico.jpg",
-  "measurementName": "Masa"
+  "name": "Tomate cherry",
+  "imageUrl": "https://ejemplo.com/images/tomatecherry.jpg"
 }
 ```
 

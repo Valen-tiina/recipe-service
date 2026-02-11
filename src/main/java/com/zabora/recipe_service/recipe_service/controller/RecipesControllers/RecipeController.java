@@ -1,13 +1,17 @@
 package com.zabora.recipe_service.recipe_service.controller.RecipesControllers;
 
+import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.ResponseIngredient;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.CreateRecipe;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.UpdateRecipes;
-import com.zabora.recipe_service.recipe_service.service.RecipesServices.RecipeService;
+import com.zabora.recipe_service.recipe_service.service.RecipesServices.*;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,14 +20,26 @@ import java.util.Map;
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private final RecipeServiceCreate createRecipe;
+    private final RecipeServiceDelete recipeServiceDelete;
+    private final RecipeServiceUpdate recipeServiceUpdate;
+    private final RecipeServiceRead recipeServiceRead;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService,
+                            RecipeServiceCreate createRecipe,
+                            RecipeServiceDelete recipeServiceDelete,
+                            RecipeServiceUpdate recipeServiceUpdate,
+                            RecipeServiceRead recipeServiceRead) {
         this.recipeService = recipeService;
+        this.createRecipe=createRecipe;
+        this.recipeServiceDelete=recipeServiceDelete;
+        this.recipeServiceUpdate=recipeServiceUpdate;
+        this.recipeServiceRead=recipeServiceRead;
     }
 
     @PostMapping
     public ResponseEntity<ResponseRecipes> createRecipe(@RequestBody CreateRecipe dto) {
-        ResponseRecipes createdRecipe = recipeService.createRecipe(dto);
+        ResponseRecipes createdRecipe = createRecipe.createRecipe(dto);
         return ResponseEntity.ok(createdRecipe);
     }
 
@@ -32,66 +48,95 @@ public class RecipeController {
             @PathVariable Integer id,
             @Valid @RequestBody UpdateRecipes dto
     ) {
-        return ResponseEntity.ok(recipeService.updateRecipe(id, dto));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ResponseRecipes>> getAllRecipes(
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
-        List<ResponseRecipes> recipes = recipeService.getAllRecipes(role);
-        return ResponseEntity.ok(recipes);
+        return ResponseEntity.ok(recipeServiceUpdate.updateRecipe(id, dto));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseRecipes> getRecipeById(@PathVariable Integer id) {
-        return ResponseEntity.ok(recipeService.getRecipeById(id));
+        return ResponseEntity.ok(recipeServiceRead.getRecipeById(id));
     }
 
     @GetMapping("/multiple")
     public ResponseEntity<List<ResponseRecipes>> getRecipesByIds(@RequestParam List<Integer> ids) {
-        List<ResponseRecipes> recipes = recipeService.getRecipesByIds(ids);
+        List<ResponseRecipes> recipes = recipeServiceRead.getRecipesByIds(ids);
+        return ResponseEntity.ok(recipes);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getAllRecipes(
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
+        List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes(role);
+        if (recipes == null || recipes.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 404);
+            errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/search/")
-    public ResponseEntity<List<ResponseRecipes>> searchRecipesByTitle(
+    public ResponseEntity<Object> searchRecipesByTitle(
             @RequestParam String title,
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
-        return ResponseEntity.ok(recipeService.searchRecipesByTitle(title, role));
+
+        List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByTitle(title, role);
+
+        if (recipes == null || recipes.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 404);
+            errorResponse.put("message", "No se encontraron recetas con el título: " + title);
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        return ResponseEntity.ok(recipes);
     }
 
+
     @GetMapping("/search/ingredient/")
-    public ResponseEntity<List<ResponseRecipes>> searchRecipesByIngredient(
+    public ResponseEntity<Object> searchRecipesByIngredient(
             @RequestParam String ingredient,
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role
     ) {
-        return ResponseEntity.ok(recipeService.searchRecipesByIngredient(ingredient, role));
+        List<ResponseRecipes> ingredients = recipeServiceRead.searchRecipesByIngredient(ingredient, role);
+        if (ingredients == null || ingredients.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 404);
+            errorResponse.put("message", "No se encuentra el ingrediente: " + ingredient);
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        return ResponseEntity.ok(ingredient);
     }
 
-    @DeleteMapping("/{id}")
+        @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
-        recipeService.deleteRecipe(id);
+        recipeServiceDelete.deleteRecipe(id);
         return ResponseEntity.noContent().build();
     }
 
     // Estos 4 métodos NO tienen límite por rol
     @GetMapping("/todayMeal")
     public ResponseEntity<Map<String, List<ResponseRecipes>>> getRecipesOfTheDay() {
-        return ResponseEntity.ok(recipeService.getRecipesOfTheDay());
+        return ResponseEntity.ok(recipeServiceRead.getRecipesOfTheDay());
     }
 
     @GetMapping("/breakfast")
     public ResponseEntity<List<ResponseRecipes>> getBreakfastRecipes() {
-        return ResponseEntity.ok(recipeService.getBreakfastRecipes());
+        return ResponseEntity.ok(recipeServiceRead.getBreakfastRecipes());
     }
 
     @GetMapping("/lunch")
     public ResponseEntity<List<ResponseRecipes>> getLunchRecipes() {
-        return ResponseEntity.ok(recipeService.getLunchRecipes());
+        return ResponseEntity.ok(recipeServiceRead.getLunchRecipes());
     }
 
     @GetMapping("/dinner")
     public ResponseEntity<List<ResponseRecipes>> getDinnerRecipes() {
-        return ResponseEntity.ok(recipeService.getDinnerRecipes());
+        return ResponseEntity.ok(recipeServiceRead.getDinnerRecipes());
     }
 }

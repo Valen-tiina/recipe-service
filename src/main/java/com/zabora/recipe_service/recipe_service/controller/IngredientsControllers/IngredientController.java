@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/ingredient")
@@ -31,7 +33,15 @@ public class IngredientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseIngredient>> getAllIngredients() {
+    public ResponseEntity<Object> getAllIngredients() {
+        List<ResponseIngredient> ingredient = ingredientService.getAllIngredients();
+        if (ingredient == null || ingredient.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 404);
+            errorResponse.put("message", "Parece que no tenemos ingredientes en este momento, inténtalo de nuevo más tarde");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
         return ResponseEntity.ok(ingredientService.getAllIngredients());
     }
 

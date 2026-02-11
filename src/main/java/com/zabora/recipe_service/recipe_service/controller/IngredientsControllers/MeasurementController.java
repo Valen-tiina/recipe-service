@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-// Controlador minimalista
 @RestController
 @RequestMapping("/measurements")
 public class MeasurementController {
