@@ -95,31 +95,23 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping("/search/ingredient")
-    public ResponseEntity<Object> searchRecipesByIngredient(
-            @RequestParam String ingredient,
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteRecipe(
+            @PathVariable Integer id,
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role
     ) {
-        List<String> ingredients = List.of(ingredient);
-
-        List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredients(ingredients, role);
-
-        if (recipes == null || recipes.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 404);
-            errorResponse.put("message", "No se encuentran recetas con el ingrediente: " + ingredient);
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        // Validación manual de seguridad
+        if (!"ROLE_ADMIN".equals(role)) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Prohibido");
+            error.put("message", "No tienes permisos de administrador para realizar esta acción.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
         }
 
-        return ResponseEntity.ok(recipes);
-    }
-
-        @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
         recipeServiceDelete.deleteRecipe(id);
         return ResponseEntity.noContent().build();
     }
+    
 
     // Estos 4 métodos NO tienen límite por rol
     @GetMapping("/todayMeal")
