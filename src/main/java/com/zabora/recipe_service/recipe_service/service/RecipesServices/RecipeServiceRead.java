@@ -117,28 +117,6 @@ public class RecipeServiceRead {
 
 
     //menu del dia
-    private List<ResponseRecipes> getRandomRecipesByCategory(Integer categoryId, int count) {
-        var recipes = recipeRepository.findByCategoryId(categoryId);
-
-        if (recipes.isEmpty()) {
-            throw new RuntimeException("No hay recetas disponibles para la categoría: " + categoryId);
-        }
-
-        var random = new Random();
-        var selectedRecipes = new ArrayList<ResponseRecipes>();
-
-        int recipesToSelect = Math.min(count, recipes.size());
-
-        var availableRecipes = new ArrayList<>(recipes);
-
-        for (int i = 0; i < recipesToSelect; i++) {
-            int randomIndex = random.nextInt(availableRecipes.size());
-            var selectedRecipe = availableRecipes.remove(randomIndex);
-            selectedRecipes.add(recipeService.mapToResponse(selectedRecipe));
-        }
-
-        return selectedRecipes;
-    }
 
     public List<ResponseRecipes> getBreakfastRecipes() {
         Integer BREAKFAST_CATEGORY_ID = 1;
@@ -161,23 +139,33 @@ public class RecipeServiceRead {
     }
 
     // daily recipes 3 per day
+// daily recipes 9 per day (3 per category)
     public List<ResponseRecipes> getRecipesOfTheDay() {
-        return Stream.of(1, 2, 3)
-                .map(this::getRandomRecipeByCategory)
-                .filter(Objects::nonNull)
-                .toList();
+        List<ResponseRecipes> allRecipes = new ArrayList<>();
+
+        // Sumamos las 3 de cada categoría a una sola lista
+        allRecipes.addAll(getBreakfastRecipes());
+        allRecipes.addAll(getLunchRecipes());
+        allRecipes.addAll(getDinnerRecipes());
+
+        return allRecipes;
     }
 
-    private ResponseRecipes getRandomRecipeByCategory(Integer categoryId) {
+    public List<ResponseRecipes> getRandomRecipesByCategory(Integer categoryId, int limit) {
         var recipes = recipeRepository.findByCategoryId(categoryId);
 
         if (recipes.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
 
-        var random = new Random();
-        var randomRecipe = recipes.get(random.nextInt(recipes.size()));
+        // Mezclamos la lista completa para que el orden sea aleatorio
+        Collections.shuffle(recipes);
 
-        return recipeService.mapToResponse(randomRecipe);
+        // Tomamos solo las primeras 'limit' (en este caso 3)
+        // Usamos Math.min por si acaso la categoría tiene menos de 3 recetas
+        return recipes.stream()
+                .limit(Math.min(recipes.size(), limit))
+                .map(recipeService::mapToResponse)
+                .toList();
     }
 }
