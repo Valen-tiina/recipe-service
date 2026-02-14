@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class RecipeServiceRead {
@@ -132,13 +133,23 @@ public class RecipeServiceRead {
     }
 
     // daily recipes 3 per day
-    public Map<String, List<ResponseRecipes>> getRecipesOfTheDay() {
-        var recipesOfDay = new HashMap<String, List<ResponseRecipes>>();
+    public List<ResponseRecipes> getRecipesOfTheDay() {
+        return Stream.of(1, 2, 3)
+                .map(this::getRandomRecipeByCategory)
+                .filter(Objects::nonNull)
+                .toList();
+    }
 
-        recipesOfDay.put("breakfast", getBreakfastRecipes());
-        recipesOfDay.put("lunch", getLunchRecipes());
-        recipesOfDay.put("dinner", getDinnerRecipes());
+    private ResponseRecipes getRandomRecipeByCategory(Integer categoryId) {
+        var recipes = recipeRepository.findByCategoryId(categoryId);
 
-        return recipesOfDay;
+        if (recipes.isEmpty()) {
+            return null;
+        }
+
+        var random = new Random();
+        var randomRecipe = recipes.get(random.nextInt(recipes.size()));
+
+        return recipeService.mapToResponse(randomRecipe);
     }
 }

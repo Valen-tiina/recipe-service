@@ -121,7 +121,7 @@ public class RecipeController {
 
     // Estos 4 métodos NO tienen límite por rol
     @GetMapping("/todayMeal")
-    public ResponseEntity<Map<String, List<ResponseRecipes>>> getRecipesOfTheDay() {
+    public ResponseEntity<List<ResponseRecipes>> getRecipesOfTheDay() {
         return ResponseEntity.ok(recipeServiceRead.getRecipesOfTheDay());
     }
 
