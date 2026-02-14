@@ -91,25 +91,20 @@ public class RecipeServiceRead {
 
     @Transactional(readOnly = true)
     public List<ResponseRecipes> searchRecipesByIngredients(List<String> ingredients, String role) {
-        // Limitar la cantidad de ingredientes según el rol
         int maxIngredients = limitIngredientsByRole(role);
 
-        // Si el rol no tiene permitido buscar, retornar lista vacía
         if (maxIngredients == 0) {
             return List.of();
         }
 
-        // Limitar los ingredientes a buscar según el rol
         List<String> limitedIngredients = ingredients.stream()
                 .limit(maxIngredients)
                 .toList();
 
-        // Convertir a minúsculas para la búsqueda case-insensitive
         List<String> lowerCaseIngredients = limitedIngredients.stream()
                 .map(String::toLowerCase)
                 .toList();
 
-        // Buscar recetas que contengan AL MENOS UNO de los ingredientes
         var recipes = recipeRepository.findByIngredientsNameIn(lowerCaseIngredients);
 
         var recipesResponse = recipes.stream()
