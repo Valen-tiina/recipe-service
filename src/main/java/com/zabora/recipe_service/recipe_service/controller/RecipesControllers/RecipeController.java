@@ -95,7 +95,7 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping("/search/ingredients")
+    @GetMapping("/search/ingredient")
     public ResponseEntity<Object> searchRecipesByIngredient(
             @RequestParam String ingredient,
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role

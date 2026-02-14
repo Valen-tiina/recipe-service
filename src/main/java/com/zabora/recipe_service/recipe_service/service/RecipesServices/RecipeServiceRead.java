@@ -158,11 +158,9 @@ public class RecipeServiceRead {
             return Collections.emptyList();
         }
 
-        // Mezclamos la lista completa para que el orden sea aleatorio
+
         Collections.shuffle(recipes);
 
-        // Tomamos solo las primeras 'limit' (en este caso 3)
-        // Usamos Math.min por si acaso la categoría tiene menos de 3 recetas
         return recipes.stream()
                 .limit(Math.min(recipes.size(), limit))
                 .map(recipeService::mapToResponse)
