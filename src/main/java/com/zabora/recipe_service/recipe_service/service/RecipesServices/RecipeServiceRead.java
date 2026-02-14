@@ -25,6 +25,14 @@ public class RecipeServiceRead {
                 .limit(limit)
                 .toList();
     }
+
+    private int limitIngredientsByRole(String role) {
+        return switch (role) {
+            case "ROLE_PREMIUM" -> 20;
+            case "ROLE_USER" -> 7; // Usuario registrado
+            default -> 0;
+        };
+    }
     /*PENDIENTE A CAMBIOS*/
     private int getRecipeLimitByRole(String role) {
         return switch (role) {
@@ -40,7 +48,7 @@ public class RecipeServiceRead {
     public List<ResponseRecipes> getAllRecipes(String role) {
         var allRecipes = recipeRepository.findAll()
                 .stream()
-                .map(recipeService::mapToResponse) // ✅ Usa el método de RecipeService
+                .map(recipeService::mapToResponse)
                 .toList();
 
         return limitRecipesByRole(allRecipes, role);
@@ -82,8 +90,27 @@ public class RecipeServiceRead {
     }
 
     @Transactional(readOnly = true)
-    public List<ResponseRecipes> searchRecipesByIngredient(String ingredient, String role) {
-        var recipes = recipeRepository.findByIngredientNameContaining(ingredient);
+    public List<ResponseRecipes> searchRecipesByIngredients(List<String> ingredients, String role) {
+        // Limitar la cantidad de ingredientes según el rol
+        int maxIngredients = limitIngredientsByRole(role);
+
+        // Si el rol no tiene permitido buscar, retornar lista vacía
+        if (maxIngredients == 0) {
+            return List.of();
+        }
+
+        // Limitar los ingredientes a buscar según el rol
+        List<String> limitedIngredients = ingredients.stream()
+                .limit(maxIngredients)
+                .toList();
+
+        // Convertir a minúsculas para la búsqueda case-insensitive
+        List<String> lowerCaseIngredients = limitedIngredients.stream()
+                .map(String::toLowerCase)
+                .toList();
+
+        // Buscar recetas que contengan AL MENOS UNO de los ingredientes
+        var recipes = recipeRepository.findByIngredientsNameIn(lowerCaseIngredients);
 
         var recipesResponse = recipes.stream()
                 .map(recipeService::mapToResponse)
@@ -91,6 +118,7 @@ public class RecipeServiceRead {
 
         return limitRecipesByRole(recipesResponse, role);
     }
+
 
 
     //menu del dia
@@ -130,6 +158,11 @@ public class RecipeServiceRead {
     public List<ResponseRecipes> getDinnerRecipes() {
         Integer DINNER_CATEGORY_ID = 3;
         return getRandomRecipesByCategory(DINNER_CATEGORY_ID, 3);
+    }
+
+    public List<ResponseRecipes> getSnacksRecipes(){
+        Integer SNACK_CATEGORY_ID = 4;
+        return getRandomRecipesByCategory(SNACK_CATEGORY_ID, 4);
     }
 
     // daily recipes 3 per day

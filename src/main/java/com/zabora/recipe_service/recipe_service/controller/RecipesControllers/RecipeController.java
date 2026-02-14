@@ -95,22 +95,24 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-
-    @GetMapping("/search/ingredient/")
+    @GetMapping("/search/ingredients")
     public ResponseEntity<Object> searchRecipesByIngredient(
             @RequestParam String ingredient,
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role
     ) {
-        List<ResponseRecipes> ingredients = recipeServiceRead.searchRecipesByIngredient(ingredient, role);
-        if (ingredients == null || ingredients.isEmpty()) {
+        List<String> ingredients = List.of(ingredient);
+
+        List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredients(ingredients, role);
+
+        if (recipes == null || recipes.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("status", 404);
-            errorResponse.put("message", "No se encuentra el ingrediente: " + ingredient);
+            errorResponse.put("message", "No se encuentran recetas con el ingrediente: " + ingredient);
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
-        return ResponseEntity.ok(ingredient);
+        return ResponseEntity.ok(recipes);
     }
 
         @DeleteMapping("/{id}")
@@ -122,6 +124,7 @@ public class RecipeController {
     // Estos 4 métodos NO tienen límite por rol
     @GetMapping("/todayMeal")
     public ResponseEntity<List<ResponseRecipes>> getRecipesOfTheDay() {
+        // Eliminamos el Map<> del tipo de retorno
         return ResponseEntity.ok(recipeServiceRead.getRecipesOfTheDay());
     }
 
@@ -138,5 +141,10 @@ public class RecipeController {
     @GetMapping("/dinner")
     public ResponseEntity<List<ResponseRecipes>> getDinnerRecipes() {
         return ResponseEntity.ok(recipeServiceRead.getDinnerRecipes());
+    }
+
+    @GetMapping("/snack")
+    public ResponseEntity<List<ResponseRecipes>> getSnackRecipes(){
+        return ResponseEntity.ok(recipeServiceRead.getSnacksRecipes());
     }
 }
