@@ -2,14 +2,13 @@ spring:
   application:
     name: recipe-service
   cloud:
-    enabled: false
+    enabled: true
     consul:
-      enabled: false
-      # host: consul
+      enabled: true
       host: localhost
       port: ${SPRING_CLOUD_CONSUL_PORT:8500}
       discovery:
-        register: false
+        register: true
         instance-id: recipe-service-${server.port}
         service-name: recipe-service
         health-check-path: /actuator/health
