@@ -2,14 +2,14 @@ spring:
   application:
     name: recipe-service
   cloud:
-    enabled: false
+    enabled: true
     consul:
-      enabled: false
+      enabled: true
       # host: consul
       host: localhost
       port: ${SPRING_CLOUD_CONSUL_PORT:8500}
       discovery:
-        register: false
+        register: true
         instance-id: recipe-service-${server.port}
         service-name: recipe-service
         health-check-path: /actuator/health
@@ -20,7 +20,7 @@ spring:
     # password: z@bora08
     url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
     username: root
-    password: 2006
+    password: Yulia280719**
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
