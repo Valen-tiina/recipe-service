@@ -5,8 +5,8 @@ spring:
     enabled: true
     consul:
       enabled: true
-      # host: consul
-      host: localhost
+      host: consul
+      # host: localhost
       port: ${SPRING_CLOUD_CONSUL_PORT:8500}
       discovery:
         register: true
@@ -15,23 +15,13 @@ spring:
         health-check-path: /actuator/health
         health-check-interval: 10s
   datasource:
-<<<<<<< HEAD
-    # url: jdbc:mysql://zaboradb.mysql.database.azure.com:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-    # username: zabora
-    # password: z@bora08
-    url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-    username: root
-    password: Yulia280719**
+    url: jdbc:mysql://zaboradb.mysql.database.azure.com:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
+    username: zabora
+    password: z@bora08
+    # url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
+    # username: root
+    # password: Yulia280719**
     driver-class-name: com.mysql.cj.jdbc.Driver
-=======
-     url: jdbc:mysql://zaboradb.mysql.database.azure.com:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-     username: zabora
-     password: z@bora08
-#    username: root
-#    url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-#    password: 2006
-     driver-class-name: com.mysql.cj.jdbc.Driver
->>>>>>> b8e69b24fb7e9ccdd2dd28d3a1d4a524e3938a4f
   jpa:
     hibernate:
       ddl-auto: none
