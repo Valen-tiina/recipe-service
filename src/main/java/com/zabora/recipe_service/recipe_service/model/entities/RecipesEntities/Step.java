@@ -20,7 +20,7 @@ public class Step {
     @Column(name = "step_order", nullable = false)
     private Integer stepOrder;
 
-    @Column(name = "description_step", length = 255)
+    @Column(name = "description_step", columnDefinition = "TEXT") 
     private String description;
 
     @Column(name = "time_seconds")
