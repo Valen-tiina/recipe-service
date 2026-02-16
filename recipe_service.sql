@@ -128,7 +128,8 @@ insert into units(measurement_id, name_unit)values
                                                 (1,'Taza'),
                                                 (2,'Libra'),
                                                 (2,'Onza'),
-                                                (2,'Gramo');
+                                                (2,'Gramo'),
+                                                (2,'Unidad');
 
 insert into categories(name_category)values
                                          ('Desayuno'),

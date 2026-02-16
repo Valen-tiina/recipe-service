@@ -16,7 +16,6 @@ public record UpdateRecipes(
         String title,
 
         @NotBlank(message = "La descripción de la receta es obligatoria")
-        @Size(min=5, max=100, message="La descripción debe tener entre 5 y 600 caracteres")
         String shortDescription,
 
         @NotNull(message = "La cantidad de porciones es obligatoria")

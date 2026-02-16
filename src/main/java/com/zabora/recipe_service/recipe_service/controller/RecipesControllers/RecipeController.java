@@ -62,21 +62,35 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping
-    public ResponseEntity<Object> getAllRecipes(
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
-        List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes(role);
-        if (recipes == null || recipes.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 404);
-            errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
+    // @GetMapping
+    // public ResponseEntity<Object> getAllRecipes(
+    //         @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role) {
+    //     List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes(role);
+    //     if (recipes == null || recipes.isEmpty()) {
+    //         Map<String, Object> errorResponse = new HashMap<>();
+    //         errorResponse.put("status", 404);
+    //         errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    //     }
 
-        return ResponseEntity.ok(recipes);
+    //     return ResponseEntity.ok(recipes);
+    // }
+
+@GetMapping
+public ResponseEntity<Object> getAllRecipes() {
+    List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes("ROLE_ADMIN"); // ← Sin límite
+    
+    if (recipes == null || recipes.isEmpty()) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", 404);
+        errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
+    return ResponseEntity.ok(recipes);
+}
     @GetMapping("/search")
     public ResponseEntity<Object> searchRecipesByTitle(
             @RequestParam String title,
