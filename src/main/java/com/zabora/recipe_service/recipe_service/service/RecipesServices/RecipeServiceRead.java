@@ -62,20 +62,20 @@ public class RecipeServiceRead {
         return recipeService.mapToResponse(recipe);
     }
 
-    @Transactional(readOnly = true)
-    public List<ResponseRecipes> getRecipesByIds(List<Integer> ids) {
-        var recipesMap = recipeRepository.findAllById(ids).stream()
-                .collect(Collectors.toMap(
-                        Recipe::getId,
-                        recipe -> recipe
-                ));
+   @Transactional(readOnly = true)
+public List<ResponseRecipes> getRecipesByIds(List<Integer> ids) {
+    var recipesMap = recipeRepository.findAllByIdWithRelations(ids).stream()
+            .collect(Collectors.toMap(
+                    Recipe::getId,
+                    recipe -> recipe
+            ));
 
-        return ids.stream()
-                .map(recipesMap::get)
-                .filter(r -> r != null)
-                .map(recipeService::mapToResponse)
-                .toList();
-    }
+    return ids.stream()
+            .map(recipesMap::get)
+            .filter(r -> r != null)
+            .map(recipeService::mapToResponse)
+            .toList();
+}
 
 
     @Transactional(readOnly = true)
