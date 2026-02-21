@@ -65,4 +65,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     WHERE r.id IN :ids
 """)
 List<Recipe> findAllByIdWithRelations(@Param("ids") List<Integer> ids);
+
+@Query("""
+    SELECT DISTINCT r, COUNT(i.id) as matchCount
+    FROM Recipe r
+    JOIN r.ingredients ri
+    JOIN ri.ingredient i
+    WHERE LOWER(i.name) IN :ingredientNames
+    GROUP BY r
+    ORDER BY matchCount DESC
+""")
+List<Recipe> findByIngredientsMatchingMultiple(@Param("ingredientNames") List<String> ingredientNames);
 }
