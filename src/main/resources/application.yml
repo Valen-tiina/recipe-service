@@ -5,6 +5,7 @@ spring:
     enabled: true
     consul:
       enabled: true
+      # host: consul
       host: localhost
       port: ${SPRING_CLOUD_CONSUL_PORT:8500}
       discovery:

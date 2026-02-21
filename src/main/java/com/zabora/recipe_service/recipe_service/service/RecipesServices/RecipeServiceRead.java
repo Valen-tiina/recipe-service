@@ -4,6 +4,7 @@ import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.R
 import com.zabora.recipe_service.recipe_service.repository.RecipeRepository.RecipeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.stream.Collectors;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -166,4 +167,34 @@ public List<ResponseRecipes> getRecipesByIds(List<Integer> ids) {
                 .map(recipeService::mapToResponse)
                 .toList();
     }
+    @Transactional(readOnly = true)
+public List<ResponseRecipes> searchRecipesByIngredientsMultiple(List<String> ingredients, String role) {
+    int maxIngredients = limitIngredientsByRole(role);
+
+    if (maxIngredients == 0) {
+        return List.of();
+    }
+
+    List<String> limitedIngredients = ingredients.stream()
+            .limit(maxIngredients)
+            .map(String::toLowerCase)
+            .toList();
+
+    // Traemos recetas con al menos 1 de los ingredientes
+    var recipes = recipeRepository.findByIngredientsNameIn(limitedIngredients);
+
+    // Ordenar por cantidad de coincidencias (opcional)
+    var recipesWithScore = recipes.stream()
+            .map(r -> Map.entry(r, (int) r.getIngredients().stream()
+                    .map(ri -> ri.getIngredient().getName().toLowerCase())
+                    .filter(limitedIngredients::contains)
+                    .count()))
+            .sorted((a, b) -> b.getValue().compareTo(a.getValue())) // Más coincidencias primero
+            .map(Map.Entry::getKey)
+            .toList();
+
+    return limitRecipesByRole(recipesWithScore.stream()
+            .map(recipeService::mapToResponse)
+            .toList(), role);
+}
 }

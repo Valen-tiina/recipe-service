@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -141,6 +142,30 @@ public ResponseEntity<Object> getAllRecipes() {
         // Eliminamos el Map<> del tipo de retorno
         return ResponseEntity.ok(recipeServiceRead.getRecipesOfTheDay());
     }
+
+    @GetMapping("/search/ingredient/multiple")
+public ResponseEntity<Object> searchRecipesByIngredientsMultiple(
+        @RequestParam List<String> ingredients,
+        @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role
+) {
+    if (ingredients == null || ingredients.isEmpty()) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", 400);
+        errorResponse.put("message", "Debes enviar al menos un ingrediente");
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredientsMultiple(ingredients, role);
+
+    if (recipes == null || recipes.isEmpty()) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", 404);
+        errorResponse.put("message", "No se encuentran recetas con esos ingredientes");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    return ResponseEntity.ok(recipes);
+}
 
     @GetMapping("/breakfast")
     public ResponseEntity<List<ResponseRecipes>> getBreakfastRecipes() {
