@@ -1,5 +1,5 @@
 package com.zabora.recipe_service.recipe_service.controller.RecipesControllers;
-
+import java.util.Collections;
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.ResponseIngredient;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.CreateRecipe;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
@@ -27,15 +27,15 @@ public class RecipeController {
     private final RecipeServiceRead recipeServiceRead;
 
     public RecipeController(RecipeService recipeService,
-                            RecipeServiceCreate createRecipe,
-                            RecipeServiceDelete recipeServiceDelete,
-                            RecipeServiceUpdate recipeServiceUpdate,
-                            RecipeServiceRead recipeServiceRead) {
+            RecipeServiceCreate createRecipe,
+            RecipeServiceDelete recipeServiceDelete,
+            RecipeServiceUpdate recipeServiceUpdate,
+            RecipeServiceRead recipeServiceRead) {
         this.recipeService = recipeService;
-        this.createRecipe=createRecipe;
-        this.recipeServiceDelete=recipeServiceDelete;
-        this.recipeServiceUpdate=recipeServiceUpdate;
-        this.recipeServiceRead=recipeServiceRead;
+        this.createRecipe = createRecipe;
+        this.recipeServiceDelete = recipeServiceDelete;
+        this.recipeServiceUpdate = recipeServiceUpdate;
+        this.recipeServiceRead = recipeServiceRead;
     }
 
     @PostMapping
@@ -71,27 +71,25 @@ public class RecipeController {
     //         Map<String, Object> errorResponse = new HashMap<>();
     //         errorResponse.put("status", 404);
     //         errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
-
     //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     //     }
-
     //     return ResponseEntity.ok(recipes);
     // }
+    @GetMapping
+    public ResponseEntity<Object> getAllRecipes() {
+        List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes("ROLE_ADMIN"); // ← Sin límite
 
-@GetMapping
-public ResponseEntity<Object> getAllRecipes() {
-    List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes("ROLE_ADMIN"); // ← Sin límite
-    
-    if (recipes == null || recipes.isEmpty()) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("status", 404);
-        errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
+        if (recipes == null || recipes.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 404);
+            errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        return ResponseEntity.ok(recipes);
     }
 
-    return ResponseEntity.ok(recipes);
-}
     @GetMapping("/search")
     public ResponseEntity<Object> searchRecipesByTitle(
             @RequestParam String title,
@@ -120,17 +118,13 @@ public ResponseEntity<Object> getAllRecipes() {
         List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredients(ingredients, role);
 
         if (recipes == null || recipes.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 404);
-            errorResponse.put("message", "No se encuentran recetas con el ingrediente: " + ingredient);
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            return ResponseEntity.ok(Collections.emptyList());
         }
 
         return ResponseEntity.ok(recipes);
     }
 
-        @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
         recipeServiceDelete.deleteRecipe(id);
         return ResponseEntity.noContent().build();
@@ -144,28 +138,28 @@ public ResponseEntity<Object> getAllRecipes() {
     }
 
     @GetMapping("/search/ingredient/multiple")
-public ResponseEntity<Object> searchRecipesByIngredientsMultiple(
-        @RequestParam List<String> ingredients,
-        @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role
-) {
-    if (ingredients == null || ingredients.isEmpty()) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("status", 400);
-        errorResponse.put("message", "Debes enviar al menos un ingrediente");
-        return ResponseEntity.badRequest().body(errorResponse);
+    public ResponseEntity<Object> searchRecipesByIngredientsMultiple(
+            @RequestParam List<String> ingredients,
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role
+    ) {
+        if (ingredients == null || ingredients.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 400);
+            errorResponse.put("message", "Debes enviar al menos un ingrediente");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredientsMultiple(ingredients, role);
+
+        if (recipes == null || recipes.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 404);
+            errorResponse.put("message", "No se encuentran recetas con esos ingredientes");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        return ResponseEntity.ok(recipes);
     }
-
-    List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredientsMultiple(ingredients, role);
-
-    if (recipes == null || recipes.isEmpty()) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("status", 404);
-        errorResponse.put("message", "No se encuentran recetas con esos ingredientes");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-    }
-
-    return ResponseEntity.ok(recipes);
-}
 
     @GetMapping("/breakfast")
     public ResponseEntity<List<ResponseRecipes>> getBreakfastRecipes() {
@@ -183,7 +177,7 @@ public ResponseEntity<Object> searchRecipesByIngredientsMultiple(
     }
 
     @GetMapping("/snack")
-    public ResponseEntity<List<ResponseRecipes>> getSnackRecipes(){
+    public ResponseEntity<List<ResponseRecipes>> getSnackRecipes() {
         return ResponseEntity.ok(recipeServiceRead.getSnacksRecipes());
     }
 }
