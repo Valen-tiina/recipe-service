@@ -15,12 +15,12 @@ spring:
         health-check-path: /actuator/health
         health-check-interval: 10s
   datasource:
-        url: jdbc:mysql://zaboradb.mysql.database.azure.com:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-        username: zabora
-        password: z@bora08
-        # username: root
-        # url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-        # password: 2006
+        # url: jdbc:mysql://zaboradb.mysql.database.azure.com:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
+        # username: zabora
+        # password: z@bora08
+        username: root
+        url: jdbc:mysql://localhost:3306/recipe_service?sslMode=REQUIRED&allowPublicKeyRetrieval=true
+        password: 2006
         driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
