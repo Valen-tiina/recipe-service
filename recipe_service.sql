@@ -14,7 +14,7 @@ create table licenses_recipe(
 create table recipes (
                          ID int auto_increment primary key,
                          title varchar(100) not null,
-                         short_desc varchar(600) not null,
+                         short_desc text not null,
                          total_time_min int,
                          difficulty_id int,
                          servings int not null,
@@ -26,10 +26,7 @@ create table recipes (
 create table ingredients (
                              ID int auto_increment primary key,
                              name_ing varchar (100) not null,
-                             image_url varchar(150) not null,
-                             constraint fk_ing_measure foreign key (measurement_id)
-                                 references measurement(ID)
-                                 on delete cascade on update cascade
+                             image_url varchar(150) not null
 );
 
 create table measurement(
@@ -53,13 +50,13 @@ create table flavors (
 create table licenses_img(
                              ID int auto_increment primary key,
                              name_license varchar(100) not null,
-                             url_recipe varchar(150) not null);
+                             url_recipe text not null);
 
 create table steps (
                        ID int auto_increment primary key,
                        recipe_id int not null,
                        step_order int not null,
-                       description_step varchar(255),
+                       description_step text,
                        time_seconds int,
                        image_url varchar(150),
                        constraint fk_step_recipe foreign key (recipe_id) references recipes(ID)on delete cascade on update cascade
@@ -129,7 +126,8 @@ insert into units(measurement_id, name_unit)values
                                                 (2,'Libra'),
                                                 (2,'Onza'),
                                                 (2,'Gramo'),
-                                                (2,'Unidad');
+                                                (2,'Unidad'),
+                                                (1,'Al gusto');
 
 insert into categories(name_category)values
                                          ('Desayuno'),
