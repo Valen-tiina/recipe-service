@@ -1,6 +1,7 @@
 package com.zabora.recipe_service.recipe_service.repository.RecipeRepository;
 
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -76,4 +77,10 @@ List<Recipe> findAllByIdWithRelations(@Param("ids") List<Integer> ids);
     ORDER BY matchCount DESC
 """)
 List<Recipe> findByIngredientsMatchingMultiple(@Param("ingredientNames") List<String> ingredientNames);
+@Query("""
+    SELECT new com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName(r.id, r.title)
+    FROM Recipe r
+    WHERE r.id IN :ids
+""")
+List<RecipeName> findRecipeNamesByIds(@Param("ids") List<Integer> ids);
 }
