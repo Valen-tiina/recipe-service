@@ -63,18 +63,6 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    // @GetMapping
-    // public ResponseEntity<Object> getAllRecipes(
-    //         @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role) {
-    //     List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes(role);
-    //     if (recipes == null || recipes.isEmpty()) {
-    //         Map<String, Object> errorResponse = new HashMap<>();
-    //         errorResponse.put("status", 404);
-    //         errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-    //     }
-    //     return ResponseEntity.ok(recipes);
-    // }
     @GetMapping
     public ResponseEntity<Object> getAllRecipes() {
         List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes("ROLE_ADMIN"); // ← Sin límite
@@ -160,6 +148,15 @@ public class RecipeController {
 
         return ResponseEntity.ok(recipes);
     }
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getRecipeNamesByIds(
+            @RequestParam List<Integer> ids
+    ) {
+        return ResponseEntity.ok(
+                recipeServiceRead.getRecipeNamesByIds(ids)
+        );
+    }
+
 
     @GetMapping("/breakfast")
     public ResponseEntity<List<ResponseRecipes>> getBreakfastRecipes() {

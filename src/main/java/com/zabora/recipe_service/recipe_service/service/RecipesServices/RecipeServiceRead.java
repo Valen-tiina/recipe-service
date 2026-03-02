@@ -1,5 +1,6 @@
 package com.zabora.recipe_service.recipe_service.service.RecipesServices;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
 import com.zabora.recipe_service.recipe_service.repository.RecipeRepository.RecipeRepository;
 import org.springframework.stereotype.Service;
@@ -197,4 +198,15 @@ public List<ResponseRecipes> searchRecipesByIngredientsMultiple(List<String> ing
             .map(recipeService::mapToResponse)
             .toList(), role);
 }
+
+
+@Transactional(readOnly = true)
+public List<String> getRecipeNamesByIds(List<Integer> ids) {
+
+    return recipeRepository.findRecipeNamesByIds(ids)
+            .stream()
+            .map(RecipeName::title)
+            .toList();
+}
+
 }
