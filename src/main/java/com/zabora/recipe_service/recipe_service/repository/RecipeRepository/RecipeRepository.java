@@ -92,7 +92,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     @Query("""
     Select new com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary(
-            r.id, r.title, r.shortDescription, ri.imageUrl
+            r.id, r.title, r.shortDescription, r.totalTimeMin ,ri.imageUrl
     )
     FROM Recipe r
     LEFT JOIN r.images ri
