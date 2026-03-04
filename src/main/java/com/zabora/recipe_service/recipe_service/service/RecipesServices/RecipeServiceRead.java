@@ -1,4 +1,5 @@
 package com.zabora.recipe_service.recipe_service.service.RecipesServices;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
@@ -207,6 +208,10 @@ public List<String> getRecipeNamesByIds(List<Integer> ids) {
             .stream()
             .map(RecipeName::title)
             .toList();
+}
+
+public List<RecipeResponseSummary> getRecipeSummary(){
+        return recipeRepository.findAllSummaries();
 }
 
 }

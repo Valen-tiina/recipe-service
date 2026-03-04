@@ -1,5 +1,6 @@
 package com.zabora.recipe_service.recipe_service.repository.RecipeRepository;
 
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import org.springframework.data.domain.Page;
@@ -13,8 +14,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
-    Page<Recipe> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
     List<Recipe> findByTitleContainingIgnoreCase(String title);
+
     @Query("""
         SELECT DISTINCT r FROM Recipe r
         LEFT JOIN FETCH r.ingredients ri
@@ -39,8 +41,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
         WHERE r.id = :id
     """)
     Optional<Recipe> findByIdWithAllRelations(@Param("id") Integer id);
+
     List<Recipe> findByTotalTimeMinLessThanEqual(Integer maxTime);
+
     Page<Recipe> findByCategoriesIdIn(Set<Integer> categoryIds, Pageable pageable);
+
     Page<Recipe> findByDifficultyId(Integer difficultyId, Pageable pageable);
 
 
@@ -50,7 +55,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Query("SELECT DISTINCT r FROM Recipe r JOIN r.ingredients ri JOIN ri.ingredient i WHERE LOWER(i.name) IN :ingredientNames")
     List<Recipe> findByIngredientsNameIn(@Param("ingredientNames") List<String> ingredientNames);
 
-@Query("""
+    @Query("""
     SELECT DISTINCT r FROM Recipe r
     LEFT JOIN FETCH r.ingredients ri
     LEFT JOIN FETCH ri.ingredient
@@ -65,9 +70,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     LEFT JOIN FETCH r.license
     WHERE r.id IN :ids
 """)
-List<Recipe> findAllByIdWithRelations(@Param("ids") List<Integer> ids);
+    List<Recipe> findAllByIdWithRelations(@Param("ids") List<Integer> ids);
 
-@Query("""
+    @Query("""
     SELECT DISTINCT r, COUNT(i.id) as matchCount
     FROM Recipe r
     JOIN r.ingredients ri
@@ -76,11 +81,23 @@ List<Recipe> findAllByIdWithRelations(@Param("ids") List<Integer> ids);
     GROUP BY r
     ORDER BY matchCount DESC
 """)
-List<Recipe> findByIngredientsMatchingMultiple(@Param("ingredientNames") List<String> ingredientNames);
-@Query("""
+    List<Recipe> findByIngredientsMatchingMultiple(@Param("ingredientNames") List<String> ingredientNames);
+
+    @Query("""
     SELECT new com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName(r.id, r.title)
     FROM Recipe r
     WHERE r.id IN :ids
 """)
-List<RecipeName> findRecipeNamesByIds(@Param("ids") List<Integer> ids);
+    List<RecipeName> findRecipeNamesByIds(@Param("ids") List<Integer> ids);
+
+    @Query("""
+    Select new com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary(
+            r.id, r.title, r.shortDescription, ri.imageUrl
+    )
+    FROM Recipe r
+    LEFT JOIN r.images ri
+""")
+    List<RecipeResponseSummary> findAllSummaries();
 }
+
+

@@ -2,6 +2,7 @@ package com.zabora.recipe_service.recipe_service.controller.RecipesControllers;
 import java.util.Collections;
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.ResponseIngredient;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.CreateRecipe;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.UpdateRecipes;
 import com.zabora.recipe_service.recipe_service.service.RecipesServices.*;
@@ -177,4 +178,10 @@ public class RecipeController {
     public ResponseEntity<List<ResponseRecipes>> getSnackRecipes() {
         return ResponseEntity.ok(recipeServiceRead.getSnacksRecipes());
     }
+
+    @GetMapping("/recipeSummary")
+    public ResponseEntity<List<RecipeResponseSummary>> getRecipeSummary(){
+        return ResponseEntity.ok(recipeServiceRead.getRecipeSummary());
+    }
+
 }
