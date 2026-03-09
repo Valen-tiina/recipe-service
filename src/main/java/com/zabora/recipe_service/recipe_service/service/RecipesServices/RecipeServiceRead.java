@@ -1,8 +1,13 @@
 package com.zabora.recipe_service.recipe_service.service.RecipesServices;
+import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.AlergiaDTO;
+import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.CondicionMedicaDTO;
+import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.MedicalInfoResponse;
+import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.PreferenciaDTO;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
+import com.zabora.recipe_service.recipe_service.repository.AuthClient;
 import com.zabora.recipe_service.recipe_service.repository.RecipeRepository.RecipeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,14 +17,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 @Service
 public class RecipeServiceRead {
     private final RecipeService recipeService;
     private final RecipeRepository recipeRepository;
-
-    public RecipeServiceRead(RecipeService recipeService, RecipeRepository recipeRepository){
+    private final AuthClient authClient;
+    public RecipeServiceRead(RecipeService recipeService, RecipeRepository recipeRepository, AuthClient authClient){
         this.recipeService=recipeService;
         this.recipeRepository=recipeRepository;
+        this.authClient=authClient;
     }
     private List<ResponseRecipes> limitRecipesByRole(List<ResponseRecipes> recipes, String role) {
         int limit = getRecipeLimitByRole(role);
@@ -209,9 +216,72 @@ public List<String> getRecipeNamesByIds(List<Integer> ids) {
             .map(RecipeName::title)
             .toList();
 }
-
-public List<RecipeResponseSummary> getRecipeSummary(){
+    public List<RecipeResponseSummary> getRecipeSummary(){
         return recipeRepository.findAllSummaries();
-}
+    }
 
+    public List<RecipeResponseSummary> getRecipeSummaryByUser(Long userId){
+
+        MedicalInfoResponse medicalInfo =
+                authClient.getUserMedicalInfo(userId);
+
+        List<String> ingredientesProhibidos = new ArrayList<>();
+
+        //condiciones médicas
+        for(CondicionMedicaDTO condicion : medicalInfo.getCondicionesMedicas()){
+            
+
+            if(condicion.getId() == 2){
+                ingredientesProhibidos.add("azucar");
+                ingredientesProhibidos.add("miel");
+                ingredientesProhibidos.add("jarabe");
+            }
+
+            if(condicion.getId() == 3){ // Hipertension
+                ingredientesProhibidos.add("sal");
+            }
+        }
+
+        // alergias
+        for(AlergiaDTO alergia : medicalInfo.getAlergias()){
+
+            if(alergia.getId() == 4){
+                ingredientesProhibidos.add("leche");
+                ingredientesProhibidos.add("queso");
+                ingredientesProhibidos.add("mantequilla");
+                ingredientesProhibidos.add("yogurt");
+            }
+
+            if(alergia.getId() == 2){
+                ingredientesProhibidos.add("mani");
+            }
+        }
+
+        // preferencias
+        PreferenciaDTO pref = medicalInfo.getPreferenciaAlimenticia();
+
+        if(pref != null){
+
+            if(pref.getId() == 2){
+                ingredientesProhibidos.add("carne");
+                ingredientesProhibidos.add("pollo");
+                ingredientesProhibidos.add("huevo");
+                ingredientesProhibidos.add("leche");
+                ingredientesProhibidos.add("queso");
+            }
+
+            if(pref.getId() == 4){
+                ingredientesProhibidos.add("trigo");
+                ingredientesProhibidos.add("cebada");
+                ingredientesProhibidos.add("centeno");
+            }
+
+        }
+
+        if(ingredientesProhibidos.isEmpty()){
+            return recipeRepository.findAllSummaries();
+        }
+
+        return recipeRepository.findRecipesWithoutIngredients(ingredientesProhibidos);
+    }
 }

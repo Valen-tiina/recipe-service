@@ -180,8 +180,15 @@ public class RecipeController {
     }
 
     @GetMapping("/recipeSummary")
-    public ResponseEntity<List<RecipeResponseSummary>> getRecipeSummary(){
-        return ResponseEntity.ok(recipeServiceRead.getRecipeSummary());
+    public ResponseEntity<List<RecipeResponseSummary>> getRecipeSummary(
+            @RequestHeader(value = "X-User-Id", required = false) Long userId
+    ) {
+
+        if(userId == null){
+            return ResponseEntity.ok(recipeServiceRead.getRecipeSummary());
+        }
+
+        return ResponseEntity.ok(recipeServiceRead.getRecipeSummaryByUser(userId));
     }
 
 }
