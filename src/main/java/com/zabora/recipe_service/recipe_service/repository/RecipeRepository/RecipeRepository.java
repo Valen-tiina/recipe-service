@@ -98,6 +98,26 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     LEFT JOIN r.images ri
 """)
     List<RecipeResponseSummary> findAllSummaries();
+
+    @Query("""
+SELECT DISTINCT new com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary(
+        r.id, r.title, r.shortDescription, r.totalTimeMin, ri.imageUrl
+)
+FROM Recipe r
+LEFT JOIN r.images ri
+WHERE r.id NOT IN (
+
+    SELECT r2.id
+    FROM Recipe r2
+    JOIN r2.ingredients ri2
+    JOIN ri2.ingredient i
+    WHERE LOWER(i.name) IN :ingredientes
+
+)
+""")
+    List<RecipeResponseSummary> findRecipesWithoutIngredients(
+            @Param("ingredientes") List<String> ingredientes
+    );
 }
 
 
