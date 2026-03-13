@@ -47,11 +47,18 @@ public class RecipesTest extends BaseTest {
 				}
 				""";
 
-		given().contentType(ContentType.JSON).body(body)
+		 given()
+	        .contentType(ContentType.JSON)
+	        .header("X-Rol", "ADMIN") 
+	        .body(body)
 
-				.when().post("/recipes")
+	    .when()
+	        .post("/recipes")
 
-				.then().log().all().statusCode(200).body("title", equalTo("Pasta Carbonara"));
+	    .then()
+	        .log().all()
+	        .statusCode(200)
+	        .body("title", equalTo("Pasta Carbonara"));
 	}
 
 	@Test
