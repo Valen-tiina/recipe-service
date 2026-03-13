@@ -5,6 +5,7 @@ import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDT
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.UpdateRecipes;
+import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
 import com.zabora.recipe_service.recipe_service.service.RecipesServices.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,17 +27,23 @@ public class RecipeController {
     private final RecipeServiceDelete recipeServiceDelete;
     private final RecipeServiceUpdate recipeServiceUpdate;
     private final RecipeServiceRead recipeServiceRead;
+    private final RecipeServiceSummaries recipeServiceSummaries;
+    private final RecipeServiceMenus recipeServiceMenus;
 
     public RecipeController(RecipeService recipeService,
             RecipeServiceCreate createRecipe,
             RecipeServiceDelete recipeServiceDelete,
             RecipeServiceUpdate recipeServiceUpdate,
-            RecipeServiceRead recipeServiceRead) {
+            RecipeServiceRead recipeServiceRead,
+                            RecipeServiceSummaries recipeServiceSummaries,
+                            RecipeServiceMenus recipeServiceMenus) {
         this.recipeService = recipeService;
         this.createRecipe = createRecipe;
         this.recipeServiceDelete = recipeServiceDelete;
         this.recipeServiceUpdate = recipeServiceUpdate;
         this.recipeServiceRead = recipeServiceRead;
+        this.recipeServiceMenus= recipeServiceMenus;
+        this.recipeServiceSummaries=recipeServiceSummaries;
     }
 
     @PostMapping
@@ -59,9 +66,8 @@ public class RecipeController {
     }
 
     @GetMapping("/multiple")
-    public ResponseEntity<List<ResponseRecipes>> getRecipesByIds(@RequestParam List<Integer> ids) {
-        List<ResponseRecipes> recipes = recipeServiceRead.getRecipesByIds(ids);
-        return ResponseEntity.ok(recipes);
+    public ResponseEntity<List<RecipeResponseSummary>> getRecipesByIds(@RequestParam List<Integer> ids) {
+        return ResponseEntity.ok(recipeServiceRead.getRecipesByIds(ids));
     }
 
     @GetMapping
@@ -84,13 +90,12 @@ public class RecipeController {
             @RequestParam String title,
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
 
-        List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByTitle(title, role);
+        List<RecipeResponseSummary> recipes = recipeServiceRead.searchRecipesByTitle(title, role);
 
         if (recipes == null || recipes.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("status", 404);
             errorResponse.put("message", "No se encontraron recetas con el título: " + title);
-
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
@@ -100,11 +105,10 @@ public class RecipeController {
     @GetMapping("/search/ingredient")
     public ResponseEntity<Object> searchRecipesByIngredient(
             @RequestParam String ingredient,
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role
-    ) {
-        List<String> ingredients = List.of(ingredient);
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role) {
 
-        List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredients(ingredients, role);
+        List<RecipeResponseSummary> recipes = recipeServiceRead
+                .searchRecipesByIngredients(List.of(ingredient), role);
 
         if (recipes == null || recipes.isEmpty()) {
             return ResponseEntity.ok(Collections.emptyList());
@@ -121,16 +125,16 @@ public class RecipeController {
 
     // Estos 4 métodos NO tienen límite por rol
     @GetMapping("/todayMeal")
-    public ResponseEntity<List<ResponseRecipes>> getRecipesOfTheDay() {
+    public ResponseEntity<List<RecipeResponseSummary>> getRecipesOfTheDay() {
         // Eliminamos el Map<> del tipo de retorno
-        return ResponseEntity.ok(recipeServiceRead.getRecipesOfTheDay());
+        return ResponseEntity.ok(recipeServiceMenus.getRecipesOfTheDay());
     }
 
     @GetMapping("/search/ingredient/multiple")
     public ResponseEntity<Object> searchRecipesByIngredientsMultiple(
             @RequestParam List<String> ingredients,
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role
-    ) {
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role) {
+
         if (ingredients == null || ingredients.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("status", 400);
@@ -138,7 +142,8 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
-        List<ResponseRecipes> recipes = recipeServiceRead.searchRecipesByIngredientsMultiple(ingredients, role);
+        List<RecipeResponseSummary> recipes = recipeServiceRead
+                .searchRecipesByIngredientsMultiple(ingredients, role);
 
         if (recipes == null || recipes.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
@@ -149,6 +154,7 @@ public class RecipeController {
 
         return ResponseEntity.ok(recipes);
     }
+
     @GetMapping("/names")
     public ResponseEntity<List<String>> getRecipeNamesByIds(
             @RequestParam List<Integer> ids
@@ -158,25 +164,24 @@ public class RecipeController {
         );
     }
 
-
     @GetMapping("/breakfast")
-    public ResponseEntity<List<ResponseRecipes>> getBreakfastRecipes() {
-        return ResponseEntity.ok(recipeServiceRead.getBreakfastRecipes());
+    public ResponseEntity<List<RecipeResponseSummary>> getBreakfastRecipes() {
+        return ResponseEntity.ok(recipeServiceMenus.getBreakfastRecipes());
     }
 
     @GetMapping("/lunch")
-    public ResponseEntity<List<ResponseRecipes>> getLunchRecipes() {
-        return ResponseEntity.ok(recipeServiceRead.getLunchRecipes());
+    public ResponseEntity<List<RecipeResponseSummary>> getLunchRecipes() {
+        return ResponseEntity.ok(recipeServiceMenus.getLunchRecipes());
     }
 
     @GetMapping("/dinner")
-    public ResponseEntity<List<ResponseRecipes>> getDinnerRecipes() {
-        return ResponseEntity.ok(recipeServiceRead.getDinnerRecipes());
+    public ResponseEntity<List<RecipeResponseSummary>> getDinnerRecipes() {
+        return ResponseEntity.ok(recipeServiceMenus.getDinnerRecipes());
     }
 
     @GetMapping("/snack")
-    public ResponseEntity<List<ResponseRecipes>> getSnackRecipes() {
-        return ResponseEntity.ok(recipeServiceRead.getSnacksRecipes());
+    public ResponseEntity<List<RecipeResponseSummary>> getSnackRecipes() {
+        return ResponseEntity.ok(recipeServiceMenus.getSnacksRecipes());
     }
 
     @GetMapping("/recipeSummary")
@@ -185,10 +190,10 @@ public class RecipeController {
     ) {
 
         if(userId == null){
-            return ResponseEntity.ok(recipeServiceRead.getRecipeSummary());
+            return ResponseEntity.ok(recipeServiceSummaries.getRecipeSummary());
         }
 
-        return ResponseEntity.ok(recipeServiceRead.getRecipeSummaryByUser(userId));
+        return ResponseEntity.ok(recipeServiceSummaries.getRecipeSummaryByUser(userId));
     }
 
 }

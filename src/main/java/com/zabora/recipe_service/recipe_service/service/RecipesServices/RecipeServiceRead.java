@@ -1,287 +1,143 @@
 package com.zabora.recipe_service.recipe_service.service.RecipesServices;
-import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.AlergiaDTO;
-import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.CondicionMedicaDTO;
-import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.MedicalInfoResponse;
-import com.zabora.recipe_service.recipe_service.model.dtos.authDTO.PreferenciaDTO;
+
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
-import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
-import com.zabora.recipe_service.recipe_service.repository.AuthClient;
 import com.zabora.recipe_service.recipe_service.repository.RecipeRepository.RecipeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.stream.Collectors;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 
 @Service
 public class RecipeServiceRead {
+
     private final RecipeService recipeService;
     private final RecipeRepository recipeRepository;
-    private final AuthClient authClient;
-    public RecipeServiceRead(RecipeService recipeService, RecipeRepository recipeRepository, AuthClient authClient){
-        this.recipeService=recipeService;
-        this.recipeRepository=recipeRepository;
-        this.authClient=authClient;
-    }
-    private List<ResponseRecipes> limitRecipesByRole(List<ResponseRecipes> recipes, String role) {
-        int limit = getRecipeLimitByRole(role);
+    private final RecipeServiceSummaries recipeSummaryService;
 
+    public RecipeServiceRead(RecipeService recipeService,
+                             RecipeRepository recipeRepository,
+                             RecipeServiceSummaries recipeSummaryService) {
+        this.recipeService = recipeService;
+        this.recipeRepository = recipeRepository;
+        this.recipeSummaryService = recipeSummaryService;
+    }
+
+
+
+    private int getRecipeLimitByRole(String role) {
+        return switch (role) {
+            case "ROLE_ADMIN", "ROLE_PREMIUM" -> Integer.MAX_VALUE;
+            case "ROLE_USER"  -> 20;
+            case "ROLE_GUEST" -> 4;
+            default           -> 1;
+        };
+    }
+
+    private int getIngredientLimitByRole(String role) {
+        return switch (role) {
+            case "ROLE_PREMIUM" -> 20;
+            case "ROLE_USER"    -> 7;
+            default             -> 0;
+        };
+    }
+
+    private List<RecipeResponseSummary> applyRoleLimit(List<RecipeResponseSummary> recipes, String role) {
         return recipes.stream()
-                .limit(limit)
+                .limit(getRecipeLimitByRole(role))
                 .toList();
     }
 
-    private int limitIngredientsByRole(String role) {
-        return switch (role) {
-            case "ROLE_PREMIUM" -> 20;
-            case "ROLE_USER" -> 7; // Usuario registrado
-            default -> 0;
-        };
-    }
-    /*PENDIENTE A CAMBIOS*/
-    private int getRecipeLimitByRole(String role) {
-        return switch (role) {
-            case "ROLE_ADMIN" -> Integer.MAX_VALUE; // Sin límite
-            case "ROLE_PREMIUM" -> Integer.MAX_VALUE;
-            case "ROLE_USER" -> 20; // Usuario registrado
-            case "ROLE_GUEST" -> 4; // Invitado
-            default -> 1;
-        };
-    }
+
 
     @Transactional(readOnly = true)
     public List<ResponseRecipes> getAllRecipes(String role) {
-        var allRecipes = recipeRepository.findAll()
-                .stream()
+        int limit = getRecipeLimitByRole(role);
+        return recipeRepository.findAll().stream()
                 .map(recipeService::mapToResponse)
+                .limit(limit)
                 .toList();
-
-        return limitRecipesByRole(allRecipes, role);
     }
 
     @Transactional(readOnly = true)
     public ResponseRecipes getRecipeById(Integer id) {
         Recipe recipe = recipeRepository.findByIdWithAllRelations(id)
                 .orElseThrow(() -> new RuntimeException("Receta no encontrada"));
-
         return recipeService.mapToResponse(recipe);
     }
 
-   @Transactional(readOnly = true)
-public List<ResponseRecipes> getRecipesByIds(List<Integer> ids) {
-    var recipesMap = recipeRepository.findAllByIdWithRelations(ids).stream()
-            .collect(Collectors.toMap(
-                    Recipe::getId,
-                    recipe -> recipe
-            ));
-
-    return ids.stream()
-            .map(recipesMap::get)
-            .filter(r -> r != null)
-            .map(recipeService::mapToResponse)
-            .toList();
-}
-
-
     @Transactional(readOnly = true)
-    public List<ResponseRecipes> searchRecipesByTitle(String title, String role) {
-        var recipes = recipeRepository.findByTitleContainingIgnoreCase(title);
+    public List<RecipeResponseSummary> getRecipesByIds(List<Integer> ids) {
+        Map<Integer, Recipe> recipesMap = recipeRepository.findAllByIdWithRelations(ids).stream()
+                .collect(Collectors.toMap(Recipe::getId, r -> r));
 
-        var recipesResponse = recipes.stream()
-                .map(recipeService::mapToResponse)
-                .toList();
-
-        return limitRecipesByRole(recipesResponse, role);
+        return recipeSummaryService.mapToSummary(
+                ids.stream()
+                        .map(recipesMap::get)
+                        .filter(r -> r != null)
+                        .toList()
+        );
     }
 
     @Transactional(readOnly = true)
-    public List<ResponseRecipes> searchRecipesByIngredients(List<String> ingredients, String role) {
-        int maxIngredients = limitIngredientsByRole(role);
-
-        if (maxIngredients == 0) {
-            return List.of();
-        }
-
-        List<String> limitedIngredients = ingredients.stream()
-                .limit(maxIngredients)
+    public List<String> getRecipeNamesByIds(List<Integer> ids) {
+        return recipeRepository.findRecipeNamesByIds(ids).stream()
+                .map(RecipeName::title)
                 .toList();
+    }
 
-        List<String> lowerCaseIngredients = limitedIngredients.stream()
+
+    @Transactional(readOnly = true)
+    public List<RecipeResponseSummary> searchRecipesByTitle(String title, String role) {
+        return applyRoleLimit(
+                recipeSummaryService.mapToSummary(
+                        recipeRepository.findByTitleContainingIgnoreCase(title)
+                ),
+                role
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecipeResponseSummary> searchRecipesByIngredients(List<String> ingredients, String role) {
+        int max = getIngredientLimitByRole(role);
+        if (max == 0) return List.of();
+
+        List<String> limited = ingredients.stream()
+                .limit(max)
                 .map(String::toLowerCase)
                 .toList();
 
-        var recipes = recipeRepository.findByIngredientsNameIn(lowerCaseIngredients);
-
-        var recipesResponse = recipes.stream()
-                .map(recipeService::mapToResponse)
-                .toList();
-
-        return limitRecipesByRole(recipesResponse, role);
+        return applyRoleLimit(
+                recipeSummaryService.mapToSummary(
+                        recipeRepository.findByIngredientsNameIn(limited)
+                ),
+                role
+        );
     }
 
-
-
-    //menu del dia
-
-    public List<ResponseRecipes> getBreakfastRecipes() {
-        Integer BREAKFAST_CATEGORY_ID = 1;
-        return getRandomRecipesByCategory(BREAKFAST_CATEGORY_ID, 3);
-    }
-
-    public List<ResponseRecipes> getLunchRecipes() {
-        Integer LUNCH_CATEGORY_ID = 2;
-        return getRandomRecipesByCategory(LUNCH_CATEGORY_ID, 3);
-    }
-
-    public List<ResponseRecipes> getDinnerRecipes() {
-        Integer DINNER_CATEGORY_ID = 3;
-        return getRandomRecipesByCategory(DINNER_CATEGORY_ID, 3);
-    }
-
-    public List<ResponseRecipes> getSnacksRecipes(){
-        Integer SNACK_CATEGORY_ID = 4;
-        return getRandomRecipesByCategory(SNACK_CATEGORY_ID, 4);
-    }
-
-    // daily recipes 3 per day
-// daily recipes 9 per day (3 per category)
-    public List<ResponseRecipes> getRecipesOfTheDay() {
-        List<ResponseRecipes> allRecipes = new ArrayList<>();
-
-        // Sumamos las 3 de cada categoría a una sola lista
-        allRecipes.addAll(getBreakfastRecipes());
-        allRecipes.addAll(getLunchRecipes());
-        allRecipes.addAll(getDinnerRecipes());
-
-        return allRecipes;
-    }
-
-    public List<ResponseRecipes> getRandomRecipesByCategory(Integer categoryId, int limit) {
-        var recipes = recipeRepository.findByCategoryId(categoryId);
-
-        if (recipes.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-
-        Collections.shuffle(recipes);
-
-        return recipes.stream()
-                .limit(Math.min(recipes.size(), limit))
-                .map(recipeService::mapToResponse)
-                .toList();
-    }
     @Transactional(readOnly = true)
-public List<ResponseRecipes> searchRecipesByIngredientsMultiple(List<String> ingredients, String role) {
-    int maxIngredients = limitIngredientsByRole(role);
+    public List<RecipeResponseSummary> searchRecipesByIngredientsMultiple(List<String> ingredients, String role) {
+        int max = getIngredientLimitByRole(role);
+        if (max == 0) return List.of();
 
-    if (maxIngredients == 0) {
-        return List.of();
-    }
+        List<String> limited = ingredients.stream()
+                .limit(max)
+                .map(String::toLowerCase)
+                .toList();
 
-    List<String> limitedIngredients = ingredients.stream()
-            .limit(maxIngredients)
-            .map(String::toLowerCase)
-            .toList();
+        List<Recipe> sorted = recipeRepository.findByIngredientsNameIn(limited).stream()
+                .map(r -> Map.entry(r, (int) r.getIngredients().stream()
+                        .map(ri -> ri.getIngredient().getName().toLowerCase())
+                        .filter(limited::contains)
+                        .count()))
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .map(Map.Entry::getKey)
+                .toList();
 
-    // Traemos recetas con al menos 1 de los ingredientes
-    var recipes = recipeRepository.findByIngredientsNameIn(limitedIngredients);
-
-    // Ordenar por cantidad de coincidencias (opcional)
-    var recipesWithScore = recipes.stream()
-            .map(r -> Map.entry(r, (int) r.getIngredients().stream()
-                    .map(ri -> ri.getIngredient().getName().toLowerCase())
-                    .filter(limitedIngredients::contains)
-                    .count()))
-            .sorted((a, b) -> b.getValue().compareTo(a.getValue())) // Más coincidencias primero
-            .map(Map.Entry::getKey)
-            .toList();
-
-    return limitRecipesByRole(recipesWithScore.stream()
-            .map(recipeService::mapToResponse)
-            .toList(), role);
-}
-
-
-@Transactional(readOnly = true)
-public List<String> getRecipeNamesByIds(List<Integer> ids) {
-
-    return recipeRepository.findRecipeNamesByIds(ids)
-            .stream()
-            .map(RecipeName::title)
-            .toList();
-}
-    public List<RecipeResponseSummary> getRecipeSummary(){
-        return recipeRepository.findAllSummaries();
-    }
-
-    public List<RecipeResponseSummary> getRecipeSummaryByUser(Long userId){
-
-        MedicalInfoResponse medicalInfo =
-                authClient.getUserMedicalInfo(userId);
-
-        List<String> ingredientesProhibidos = new ArrayList<>();
-
-        //condiciones médicas
-        for(CondicionMedicaDTO condicion : medicalInfo.getCondicionesMedicas()){
-            
-
-            if(condicion.getId() == 2){
-                ingredientesProhibidos.add("azucar");
-                ingredientesProhibidos.add("miel");
-                ingredientesProhibidos.add("jarabe");
-            }
-
-            if(condicion.getId() == 3){ // Hipertension
-                ingredientesProhibidos.add("sal");
-            }
-        }
-
-        // alergias
-        for(AlergiaDTO alergia : medicalInfo.getAlergias()){
-
-            if(alergia.getId() == 4){
-                ingredientesProhibidos.add("leche");
-                ingredientesProhibidos.add("queso");
-                ingredientesProhibidos.add("mantequilla");
-                ingredientesProhibidos.add("yogurt");
-            }
-
-            if(alergia.getId() == 2){
-                ingredientesProhibidos.add("mani");
-            }
-        }
-
-        // preferencias
-        PreferenciaDTO pref = medicalInfo.getPreferenciaAlimenticia();
-
-        if(pref != null){
-
-            if(pref.getId() == 2){
-                ingredientesProhibidos.add("carne");
-                ingredientesProhibidos.add("pollo");
-                ingredientesProhibidos.add("huevo");
-                ingredientesProhibidos.add("leche");
-                ingredientesProhibidos.add("queso");
-            }
-
-            if(pref.getId() == 4){
-                ingredientesProhibidos.add("trigo");
-                ingredientesProhibidos.add("cebada");
-                ingredientesProhibidos.add("centeno");
-            }
-
-        }
-
-        if(ingredientesProhibidos.isEmpty()){
-            return recipeRepository.findAllSummaries();
-        }
-
-        return recipeRepository.findRecipesWithoutIngredients(ingredientesProhibidos);
+        return applyRoleLimit(recipeSummaryService.mapToSummary(sorted), role);
     }
 }
