@@ -8,6 +8,7 @@ import com.zabora.recipe_service.recipe_service.repository.RecipeRepository.Reci
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,20 +33,28 @@ public class RecipeServiceRead {
     private int getRecipeLimitByRole(String role) {
         return switch (role) {
             case "ROLE_ADMIN", "ROLE_PREMIUM" -> Integer.MAX_VALUE;
-            case "ROLE_USER"  -> 20;
-            case "ROLE_GUEST" -> 4;
-            default           -> 1;
+            case "ROLE_USER"  -> 30;
+            case "ROLE_GUEST" -> 5;
+            default           -> 5;
         };
     }
 
     private int getIngredientLimitByRole(String role) {
         return switch (role) {
-            case "ROLE_PREMIUM" -> 20;
+            case "ROLE_ADMIN", "ROLE_PREMIUM" -> 20;
             case "ROLE_USER"    -> 7;
             default             -> 0;
         };
     }
 
+    public List<RecipeResponseSummary> getRandomRecipes(String role, int count) {
+        List<Recipe> all = recipeRepository.findAll();
+        Collections.shuffle(all);
+        int limit = Math.min(count, getRecipeLimitByRole(role));
+        return recipeSummaryService.mapToSummary(
+                all.stream().limit(limit).toList()
+        );
+    }
     private List<RecipeResponseSummary> applyRoleLimit(List<RecipeResponseSummary> recipes, String role) {
         return recipes.stream()
                 .limit(getRecipeLimitByRole(role))

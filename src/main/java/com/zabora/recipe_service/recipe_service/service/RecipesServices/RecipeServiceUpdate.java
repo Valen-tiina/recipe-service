@@ -97,127 +97,59 @@ public class RecipeServiceUpdate {
     }
 
     private void updateRecipeIngredients(Recipe recipe, UpdateRecipes dto) {
-        // 1. Obtener los IDs de recipe_ingredients que vienen en el DTO
-        Set<Integer> incomingIds = dto.ingredients().stream()
-                .map(UpdateRecipeIngredient::recipeIngredientId)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+        recipe.getIngredients().clear();
 
-        // 2. Eliminar solo los que YA NO están en el DTO
-        recipe.getIngredients().removeIf(recipeIng ->
-                recipeIng.getId() != null && !incomingIds.contains(recipeIng.getId())
-        );
-
-        // 3. Actualizar o crear cada ingrediente
         for (var ingDto : dto.ingredients()) {
-            RecipeIngredient recipeIng;
-
-            if (ingDto.recipeIngredientId() != null) {
-                // Buscar el ingrediente existente en la colección
-                recipeIng = recipe.getIngredients().stream()
-                        .filter(ri -> ri.getId().equals(ingDto.recipeIngredientId()))
-                        .findFirst()
-                        .orElseThrow(() -> new RuntimeException("RecipeIngredient no encontrado: " + ingDto.recipeIngredientId()));
-            } else {
-                // Es un ingrediente nuevo
-                recipeIng = new RecipeIngredient();
-                recipe.getIngredients().add(recipeIng);
-            }
-
-            // Actualizar los datos
             Ingredient ingredient = ingredientRepository.findById(ingDto.ingredientId())
                     .orElseThrow(() -> new RuntimeException("Ingrediente no encontrado: " + ingDto.ingredientId()));
 
             Unit unit = unitRepository.findById(ingDto.unitId())
                     .orElseThrow(() -> new RuntimeException("Unidad no encontrada: " + ingDto.unitId()));
 
+            RecipeIngredient recipeIng = new RecipeIngredient();
             recipeIng.setRecipe(recipe);
             recipeIng.setIngredient(ingredient);
             recipeIng.setQuantity(ingDto.quantity());
             recipeIng.setUnit(unit);
+
+            recipe.getIngredients().add(recipeIng);
         }
     }
 
     private void updateRecipeImages(Recipe recipe, UpdateRecipes dto) {
-        // 1. Obtener los IDs de recipe_images que vienen en el DTO
-        Set<Integer> incomingIds = dto.images().stream()
-                .map(UpdateRecipeImages::id)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+        recipe.getImages().clear();
 
-        // 2. Eliminar solo las que YA NO están en el DTO
-        recipe.getImages().removeIf(img ->
-                img.getId() != null && !incomingIds.contains(img.getId())
-        );
-
-        // 3. Actualizar o crear cada imagen
         for (var imgDto : dto.images()) {
-            RecipeImage img;
-            LicenseImage licenseImg;
-
-            if (imgDto.id() != null) {
-                // Buscar la imagen existente
-                img = recipe.getImages().stream()
-                        .filter(i -> i.getId().equals(imgDto.id()))
-                        .findFirst()
-                        .orElseThrow(() -> new RuntimeException("RecipeImage no encontrada: " + imgDto.id()));
-
-                // Actualizar la licencia existente
-                licenseImg = img.getLicense();
-                licenseImg.setName(imgDto.licenseName());        // ← FALTABA
-                licenseImg.setUrlRecipe(imgDto.licenseUrl());    // ← Estaba mal (usabas imageUrl)
-            } else {
-                // Es una imagen nueva
-                img = new RecipeImage();
-                recipe.getImages().add(img);
-
-                licenseImg = new LicenseImage();
-                licenseImg.setName(imgDto.licenseName());        // ← FALTABA
-                licenseImg.setUrlRecipe(imgDto.licenseUrl());    // ← Estaba mal
-            }
-
+            LicenseImage licenseImg = new LicenseImage();
+            licenseImg.setName(imgDto.licenseName());
+            licenseImg.setUrlRecipe(imgDto.licenseUrl());
             licenseImg = licenseImageRepository.save(licenseImg);
 
+            RecipeImage img = new RecipeImage();
             img.setRecipe(recipe);
             img.setImageUrl(imgDto.imageUrl());
-            img.setAltText(imgDto.altText());      // ← FALTABA
-            img.setPosition(imgDto.position());    // ← FALTABA
+            img.setAltText(imgDto.altText());
+            img.setPosition(imgDto.position());
             img.setLicense(licenseImg);
+
+            recipe.getImages().add(img);
         }
     }
 
     private void updateRecipeSteps(Recipe recipe, UpdateRecipes dto) {
-        Set<Integer> incomingIds = dto.steps().stream()
-                .map(UpdateSteps::id)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-
-        recipe.getSteps().removeIf(step ->
-                step.getId() != null && !incomingIds.contains(step.getId())
-        );
+        recipe.getSteps().clear();
 
         int totalTimeSeconds = 0;
 
         for (var stepDto : dto.steps()) {
-            Step step;
-
-            if (stepDto.id() != null) {
-                step = recipe.getSteps().stream()
-                        .filter(s -> s.getId().equals(stepDto.id()))
-                        .findFirst()
-                        .orElseThrow(() -> new RuntimeException("Step no encontrado: " + stepDto.id()));
-            } else {
-                // Es un paso nuevo
-                step = new Step();
-                recipe.getSteps().add(step);
-            }
-
+            Step step = new Step();
             step.setRecipe(recipe);
             step.setStepOrder(stepDto.stepOrder());
             step.setDescription(stepDto.description());
             step.setTimeSeconds(stepDto.timeSeconds());
             step.setImageUrl(stepDto.imageUrl());
 
+            recipe.getSteps().add(step);
             totalTimeSeconds += stepDto.timeSeconds() != null ? stepDto.timeSeconds() : 0;
         }
 

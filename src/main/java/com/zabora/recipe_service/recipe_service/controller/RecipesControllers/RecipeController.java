@@ -45,19 +45,44 @@ public class RecipeController {
         this.recipeServiceMenus= recipeServiceMenus;
         this.recipeServiceSummaries=recipeServiceSummaries;
     }
+    private boolean isAdmin(String role) {
+        return "ROLE_ADMIN".equals(role);
+    }
+
+    private ResponseEntity<Object> forbidden() {
+        Map<String, Object> error = new HashMap<>();
+        error.put("status", 403);
+        error.put("message", "No tienes permisos para realizar esta acción");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
 
     @PostMapping
-    public ResponseEntity<ResponseRecipes> createRecipe(@RequestBody CreateRecipe dto) {
-        ResponseRecipes createdRecipe = createRecipe.createRecipe(dto);
-        return ResponseEntity.ok(createdRecipe);
+    public ResponseEntity<Object> createRecipe(
+            @RequestBody CreateRecipe dto,
+            @RequestHeader(value = "X-User-Role", defaultValue = "") String role) {
+
+        if (!isAdmin(role)) return forbidden();
+        return ResponseEntity.ok(createRecipe.createRecipe(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseRecipes> updateRecipe(
+    public ResponseEntity<Object> updateRecipe(
             @PathVariable Integer id,
-            @Valid @RequestBody UpdateRecipes dto
-    ) {
+            @Valid @RequestBody UpdateRecipes dto,
+            @RequestHeader(value = "X-User-Role", defaultValue = "") String role) {
+
+        if (!isAdmin(role)) return forbidden();
         return ResponseEntity.ok(recipeServiceUpdate.updateRecipe(id, dto));
+    }
+
+    @GetMapping("/recipeSummary")
+    public ResponseEntity<List<RecipeResponseSummary>> getRecipeSummary(
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+
+        if (userId == null) {
+            return ResponseEntity.ok(recipeServiceSummaries.getRecipeSummary());
+        }
+        return ResponseEntity.ok(recipeServiceSummaries.getRecipeSummaryByUser(userId));
     }
 
     @GetMapping("/{id}")
@@ -71,15 +96,16 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllRecipes() {
-        List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes("ROLE_ADMIN"); // ← Sin límite
+    public ResponseEntity<Object> getAllRecipes(
+            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
+
+        List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes(role);
 
         if (recipes == null || recipes.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 404);
-            errorResponse.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            Map<String, Object> error = new HashMap<>();
+            error.put("status", 404);
+            error.put("message", "Parece que no tenemos recetas en este momento, inténtalo de nuevo más tarde");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 
         return ResponseEntity.ok(recipes);
@@ -93,14 +119,19 @@ public class RecipeController {
         List<RecipeResponseSummary> recipes = recipeServiceRead.searchRecipesByTitle(title, role);
 
         if (recipes == null || recipes.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 404);
-            errorResponse.put("message", "No se encontraron recetas con el título: " + title);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            List<RecipeResponseSummary> suggestions = recipeServiceRead.getRandomRecipes(role, 5);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", 404);
+            response.put("message", "Parece que no encontramos recetas con ese nombre... ¡pero tenemos estas opciones para ti!");
+            response.put("suggestions", suggestions);
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         return ResponseEntity.ok(recipes);
     }
+
 
     @GetMapping("/search/ingredient")
     public ResponseEntity<Object> searchRecipesByIngredient(
@@ -117,16 +148,12 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
-        recipeServiceDelete.deleteRecipe(id);
-        return ResponseEntity.noContent().build();
-    }
 
-    // Estos 4 métodos NO tienen límite por rol
+
+
     @GetMapping("/todayMeal")
     public ResponseEntity<List<RecipeResponseSummary>> getRecipesOfTheDay() {
-        // Eliminamos el Map<> del tipo de retorno
+
         return ResponseEntity.ok(recipeServiceMenus.getRecipesOfTheDay());
     }
 
@@ -136,24 +163,25 @@ public class RecipeController {
             @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role) {
 
         if (ingredients == null || ingredients.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 400);
-            errorResponse.put("message", "Debes enviar al menos un ingrediente");
-            return ResponseEntity.badRequest().body(errorResponse);
+            Map<String, Object> error = new HashMap<>();
+            error.put("status", 400);
+            error.put("message", "Debes enviar al menos un ingrediente");
+            return ResponseEntity.badRequest().body(error);
         }
 
         List<RecipeResponseSummary> recipes = recipeServiceRead
                 .searchRecipesByIngredientsMultiple(ingredients, role);
 
         if (recipes == null || recipes.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 404);
-            errorResponse.put("message", "No se encuentran recetas con esos ingredientes");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            Map<String, Object> error = new HashMap<>();
+            error.put("status", 404);
+            error.put("message", "No se encuentran recetas con esos ingredientes");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 
         return ResponseEntity.ok(recipes);
     }
+
 
     @GetMapping("/names")
     public ResponseEntity<List<String>> getRecipeNamesByIds(
@@ -184,16 +212,14 @@ public class RecipeController {
         return ResponseEntity.ok(recipeServiceMenus.getSnacksRecipes());
     }
 
-    @GetMapping("/recipeSummary")
-    public ResponseEntity<List<RecipeResponseSummary>> getRecipeSummary(
-            @RequestHeader(value = "X-User-Id", required = false) Long userId
-    ) {
 
-        if(userId == null){
-            return ResponseEntity.ok(recipeServiceSummaries.getRecipeSummary());
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteRecipe(
+            @PathVariable Integer id,
+            @RequestHeader(value = "X-User-Role", defaultValue = "") String role) {
 
-        return ResponseEntity.ok(recipeServiceSummaries.getRecipeSummaryByUser(userId));
+        if (!isAdmin(role)) return forbidden();
+        recipeServiceDelete.deleteRecipe(id);
+        return ResponseEntity.noContent().build();
     }
-
 }
