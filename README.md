@@ -1127,6 +1127,144 @@ GET /api/recipes/dinner
     }
 ]
 ```
+### Actualizar receta
+```http
+PUT /api/recipes/id?
+```
+**JSON completo:**
+```json
+{
+  "title": "titulo actualizado",
+  "shortDescription": "descripcion actualizada",
+  "servings": 8,
+  "difficultyId": 3,
+  "licenseName": "Nombre de licencia actualizada",
+  "licenseUrl": "https://urldelicenciaactualizada.com",
+  "categoryIds": [1,2],
+  "flavorIds": [1,2],
+  "ingredients": [
+    {
+      "recipeIngredientId": 1,
+      "ingredientId": 1,
+      "quantity": 400,
+      "unitId": 9
+    }
+  ],
+  "images": [
+    {
+      "id": 1,
+      "imageUrl": "https://urlimagen.com",
+      "altText": "alt text actualizado",
+      "position": 1,
+      "licenseName": "nombre de licencia actualizada",
+      "licenseUrl": "https://urldelicencia/"
+    }
+  ],
+  "steps": [
+    {
+      "id": 1,
+      "stepOrder": 1,
+      "description": "paso 1 de descripcion actualizado",
+      "timeSeconds": 300,
+      "imageUrl": "https://example.com/images/step1.jpg"
+    },
+    {
+      "id": 2,
+      "stepOrder": 2,
+      "description": "paso 2 de descripcion actualizado",
+      "timeSeconds": 300,
+      "imageUrl": "https://example.com/images/step1.jpg"
+    }
+  ]
+}
+```
+**Respuesta:**
+```json
+{
+    "id": 22,
+    "title": "titulo actualizado",
+    "shortDescription": "descripcion actualizada",
+    "servings": 8,
+    "totalTimeMin": 10,
+    "difficulty": "Alta",
+    "license": {
+        "id": 22,
+        "name": "Nombre de licencia actualizada",
+        "urlRecipe": "https://urldelicenciaactualizada.com"
+    },
+    "categories": [
+        {
+            "id": 1,
+            "name": "Desayuno"
+        },
+        {
+            "id": 2,
+            "name": "Almuerzo"
+        }
+    ],
+    "flavors": [
+        {
+            "id": 1,
+            "name": "Salado"
+        },
+        {
+            "id": 2,
+            "name": "Dulce"
+        }
+    ],
+    "images": [
+        {
+            "id": 32,
+            "imageUrl": "https://urlimagen.com",
+            "altText": "alt text actualizado",
+            "position": 1,
+            "licenseId": 32,
+            "licenseName": "nombre de licencia actualizada",
+            "licenseUrl": "https://urldelicencia/"
+        }
+    ],
+    "ingredients": [
+        {
+            "id": 200,
+            "ingredientName": "Carne molida",
+            "ingredientImageUrl": "https://res.cloudinary.com/dxxkkxrd1/image/upload/v1771599154/ZaboraCloudy/acc5jmvrgprg3gwy6hbt.png",
+            "quantity": 400.0,
+            "unit": {
+                "id": 9,
+                "name": "Gramo",
+                "measurement": {
+                    "id": 2,
+                    "name": "Masa"
+                }
+            }
+        }
+    ],
+    "steps": [
+        {
+            "id": 167,
+            "stepOrder": 1,
+            "description": "paso 1 de descripcion actualizado",
+            "timeSeconds": 300,
+            "imageUrl": "https://example.com/images/step1.jpg"
+        },
+        {
+            "id": 168,
+            "stepOrder": 2,
+            "description": "paso 2 de descripcion actualizado",
+            "timeSeconds": 300,
+            "imageUrl": "https://example.com/images/step1.jpg"
+        }
+    ]
+}
+```
+### Eliminar recetas
+```http
+DELETE /api/recipes/id?
+```
+**respuesta**
+```
+204 No Content
+```
 ## 2 Resumen recetas
 ### Obtener resumen recetas
 ```http
