@@ -1,17 +1,18 @@
 package com.zabora.recipe_service.recipe_service.repository.RecipeRepository;
 
-import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
-import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
-import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
+import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
@@ -119,32 +120,51 @@ WHERE r.id NOT IN (
             @Param("ingredientes") List<String> ingredientes
     );*/
 
-    @Query("""
-    SELECT DISTINCT r
-    FROM Recipe r
-    LEFT JOIN FETCH r.images ri
-    LEFT JOIN FETCH r.ingredients ri2
-    JOIN FETCH ri2.ingredient i
-""")
-    List<Recipe> findAllSummaries();
+//    @Query("""
+//    SELECT DISTINCT r
+//    FROM Recipe r
+//    LEFT JOIN FETCH r.images ri
+//    LEFT JOIN FETCH r.ingredients ri2
+//    JOIN FETCH ri2.ingredient i
+//""")
+//    List<Recipe> findAllSummaries();
+    
+    @EntityGraph(attributePaths = {
+    	    "difficulty",
+    	    "license"
+    	})
+    	@Query("""
+    	    SELECT r FROM Recipe r
+    	""")
+    	Page<Recipe> findAllSummaries(Pageable pageable);
 
+//    @Query("""
+//    SELECT DISTINCT r
+//    FROM Recipe r
+//    LEFT JOIN FETCH r.images
+//    LEFT JOIN FETCH r.ingredients ri
+//    LEFT JOIN FETCH ri.ingredient i
+//    LEFT JOIN FETCH ri.unit u
+//    LEFT JOIN FETCH u.measurement
+//    WHERE r.id NOT IN (
+//        SELECT r2.id
+//        FROM Recipe r2
+//        JOIN r2.ingredients ri2
+//        JOIN ri2.ingredient i2
+//        WHERE LOWER(i2.name) IN :ingredientes
+//    )
+//""")
+//    List<Recipe> findRecipesWithoutIngredients(@Param("ingredientes") List<String> ingredientes);
+    
     @Query("""
-    SELECT DISTINCT r
-    FROM Recipe r
-    LEFT JOIN FETCH r.images
-    LEFT JOIN FETCH r.ingredients ri
-    LEFT JOIN FETCH ri.ingredient i
-    LEFT JOIN FETCH ri.unit u
-    LEFT JOIN FETCH u.measurement
-    WHERE r.id NOT IN (
-        SELECT r2.id
-        FROM Recipe r2
-        JOIN r2.ingredients ri2
-        JOIN ri2.ingredient i2
-        WHERE LOWER(i2.name) IN :ingredientes
-    )
-""")
-    List<Recipe> findRecipesWithoutIngredients(@Param("ingredientes") List<String> ingredientes);
+    	    SELECT r FROM Recipe r
+    	    WHERE r.id NOT IN (
+    	        SELECT ri.recipe.id
+    	        FROM RecipeIngredient ri
+    	        WHERE ri.ingredient.name IN :forbidden
+    	    )
+    	""")
+    	Page<Recipe> findRecipesWithoutIngredients(List<String> forbidden, Pageable pageable);
 }
 
 

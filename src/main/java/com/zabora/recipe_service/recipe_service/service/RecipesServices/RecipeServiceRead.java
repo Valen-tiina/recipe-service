@@ -1,17 +1,20 @@
 package com.zabora.recipe_service.recipe_service.service.RecipesServices;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeName;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary;
 import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.ResponseRecipes;
 import com.zabora.recipe_service.recipe_service.model.entities.RecipesEntities.Recipe;
 import com.zabora.recipe_service.recipe_service.repository.RecipeRepository.RecipeRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class RecipeServiceRead {
@@ -64,11 +67,14 @@ public class RecipeServiceRead {
 
 
     @Transactional(readOnly = true)
-    public List<ResponseRecipes> getAllRecipes(String role) {
+    public List<ResponseRecipes> getAllRecipes(String role, int page, int size) {
         int limit = getRecipeLimitByRole(role);
-        return recipeRepository.findAll().stream()
-                .map(recipeService::mapToResponse)
+
+        Page<Recipe> recipesPage = recipeRepository.findAll(PageRequest.of(page, size));
+
+        return recipesPage.getContent().stream()
                 .limit(limit)
+                .map(recipeService::mapToResponse)
                 .toList();
     }
 
