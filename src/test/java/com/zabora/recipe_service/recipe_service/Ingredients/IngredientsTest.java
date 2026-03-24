@@ -11,11 +11,13 @@ import org.junit.jupiter.api.Test;
 import com.zabora.recipe_service.recipe_service.BaseTest;
 
 import io.restassured.http.ContentType;
+import org.mockito.Mockito;
 
 public class IngredientsTest extends BaseTest {
 
     @Test
     public void crearIngrediente() {
+        Mockito.when(authClient.validateRole("ROLE_ADMIN")).thenReturn(true);
 
         String body = """
         {
@@ -26,10 +28,11 @@ public class IngredientsTest extends BaseTest {
 
         given()
             .contentType(ContentType.JSON)
+            .header("X-User-Role", "ROLE_ADMIN")
             .body(body)
 
         .when()
-            .post("/ingredients")
+            .post("/ingredient")
 
         .then()
             .log().all()
@@ -37,6 +40,45 @@ public class IngredientsTest extends BaseTest {
             .body("name", equalTo("Tomate"));
     }
 
+    @Test
+    public void updateIngrediente() {
+        Mockito.when(authClient.validateRole("ROLE_ADMIN")).thenReturn(true);
+
+        String body = """
+        {
+          "name": "Tomate",
+          "imageUrl": "https://ejemplo.com/images/tomate.jpg"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-User-Role", "ROLE_ADMIN")
+                .body(body)
+
+                .when()
+                .put("/ingredient/2")
+
+                .then()
+                .log().all()
+                .statusCode(200);
+    }
+
+    @Test
+    public void deleteIngrediente() {
+        Mockito.when(authClient.validateRole("ROLE_ADMIN")).thenReturn(true);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-User-Role", "ROLE_ADMIN")
+
+                .when()
+                .delete("/ingredient/2")
+
+                .then()
+                .log().all()
+                .statusCode(204);
+    }
 
     @Test
     public void obtenerIngredientes() {

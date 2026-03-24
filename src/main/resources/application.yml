@@ -2,7 +2,7 @@ spring:
   application:
     name: recipe-service
   cloud:
-    enabled: true
+    enabled: false
     compatibility-verifier:
       enabled: false
     consul:

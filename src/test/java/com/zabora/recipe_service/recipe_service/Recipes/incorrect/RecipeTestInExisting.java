@@ -14,7 +14,7 @@ public class RecipeTestInExisting extends BaseTest{
 
 		given().queryParam("ingredient", "ingredienteQueNoExiste123")
 
-				.when().get("/recipes/search/ingredient")
+				.when().get("/api/recipes/search/ingredient")
 
 				.then().log().all().statusCode(200).body("$", empty());
 	}
@@ -24,9 +24,9 @@ public class RecipeTestInExisting extends BaseTest{
 
 		given().queryParam("title", "recetaQueNoExisteXYZ")
 
-				.when().get("/recipes/search")
+				.when().get("/api/recipes/search")
 
-				.then().log().all().statusCode(200).body("$", empty());
+				.then().log().all().statusCode(404).body("$", empty());
 	}
 
 	@Test
@@ -34,17 +34,17 @@ public class RecipeTestInExisting extends BaseTest{
 
 		given().queryParam("ids", "99999,88888")
 
-				.when().get("/recipes/multiple")
+				.when().get("/api/recipes/multiple")
 
 				.then().log().all().statusCode(200).body("$", empty());
 	}
 
 	@Test
-	public void todayMealNoDebeSerNull() {
+	public void todayMealNotNull() {
 
 		given()
 
-				.when().get("/recipes/todayMeal")
+				.when().get("/api/recipes/todayMeal")
 
 				.then().statusCode(200).body("breakfast", notNullValue()).body("lunch", notNullValue())
 				.body("dinner", notNullValue());

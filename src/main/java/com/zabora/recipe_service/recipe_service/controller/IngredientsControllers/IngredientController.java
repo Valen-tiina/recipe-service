@@ -2,6 +2,8 @@ package com.zabora.recipe_service.recipe_service.controller.IngredientsControlle
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.ResponseIngredient;
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.CreateIngredient;
 import com.zabora.recipe_service.recipe_service.model.dtos.ingredientsdtos.ingredientDTO.UpdateIngredient;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.CreateRecipe;
+import com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.UpdateRecipes;
 import com.zabora.recipe_service.recipe_service.service.IngredientsServices.IngredientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,25 @@ public class IngredientController {
     @Autowired
     private IngredientService ingredientService;
 
+    private boolean isAdmin(String role) {
+        return "ROLE_ADMIN".equals(role);
+    }
+
+    private ResponseEntity<Object> forbidden() {
+        Map<String, Object> error = new HashMap<>();
+        error.put("status", 403);
+        error.put("message", "No tienes permisos para realizar esta acción");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
 
 
     @PostMapping
-    public ResponseEntity<ResponseIngredient> createIngredient(@Valid @RequestBody CreateIngredient dto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ingredientService.createIngredient(dto));
+    public ResponseEntity<Object> createIngredient(
+                          @RequestBody CreateIngredient dto,
+                          @RequestHeader(value = "X-User-Role", defaultValue="")String role) {
+
+        if (!isAdmin(role)) return forbidden();
+        return ResponseEntity.ok(ingredientService.createIngredient(dto));
     }
 
     @GetMapping("/{id}")
@@ -46,15 +61,20 @@ public class IngredientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseIngredient> updateIngredient(
+    public ResponseEntity<Object> updateIngredient(
             @PathVariable Integer id,
-            @RequestBody UpdateIngredient dto
+            @Valid @RequestBody UpdateIngredient dto,
+            @RequestHeader(value = "X-User-Role", defaultValue = "") String role
     ) {
+        if (!isAdmin(role)) return forbidden();
         return ResponseEntity.ok(ingredientService.updateIngredient(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIngredient(@PathVariable Integer id) {
+    public ResponseEntity<Object> deleteIngredient(
+            @PathVariable Integer id,
+            @RequestHeader(value= "X-User-Role", defaultValue = "")String role) {
+        if (!isAdmin(role)) return forbidden();
         ingredientService.deleteIngredient(id);
         return ResponseEntity.noContent().build();
     }
