@@ -24,7 +24,6 @@ public class RecipeServiceMenus {
         this.recipeServiceSummaries = recipeServiceSummaries;
     }
 
-    // ─── Menú del día ────────────────────────────────────────────────────────
 
     public List<RecipeResponseSummary> getRecipesOfTheDay() {
         List<RecipeResponseSummary> menu = new ArrayList<>();
@@ -50,7 +49,6 @@ public class RecipeServiceMenus {
         return getRandomRecipesByCategory(SNACK_CATEGORY_ID, 4);
     }
 
-    // ─── Helper ──────────────────────────────────────────────────────────────
 
     public List<RecipeResponseSummary> getRandomRecipesByCategory(Integer categoryId, int limit) {
         var recipes = recipeRepository.findByCategoryId(categoryId);

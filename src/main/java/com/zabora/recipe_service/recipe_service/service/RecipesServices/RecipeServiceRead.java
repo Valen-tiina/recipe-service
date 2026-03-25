@@ -37,8 +37,8 @@ public class RecipeServiceRead {
         return switch (role) {
             case "ROLE_ADMIN", "ROLE_PREMIUM" -> Integer.MAX_VALUE;
             case "ROLE_USER"  -> 30;
-            case "ROLE_GUEST" -> 5;
-            default           -> 5;
+            case "ROLE_GUEST" -> 4;
+            default           -> 4;
         };
     }
 
