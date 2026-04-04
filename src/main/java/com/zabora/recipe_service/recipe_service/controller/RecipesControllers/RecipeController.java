@@ -97,11 +97,7 @@ public class RecipeController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        // Log para depuración
-        System.out.println("📝 getRecipeSummary called");
-        System.out.println("    userId: " + userId);
-        System.out.println("    tipoUsuario: " + tipoUsuario);
-        System.out.println("    page: " + page + ", size: " + size);
+
 
         if (userId == null) {
             System.out.println("    → Usuario anónimo");
@@ -247,5 +243,25 @@ public class RecipeController {
         }
         recipeServiceDelete.deleteRecipe(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/recipeSummary/restricted-count")
+public ResponseEntity<Map<String, Long>> countRestricted(
+        @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+
+    if (userId == null) return ResponseEntity.ok(Map.of("restricted", 0L));
+
+    long restricted = recipeServiceSummaries.countRestrictedRecipes(userId);
+    return ResponseEntity.ok(Map.of("restricted", restricted));
+}
+
+    @GetMapping("/recipeSummary/restricted")
+    public ResponseEntity<List<RecipeResponseSummary>> getRestrictedRecipes(
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+
+        if (userId == null) return ResponseEntity.ok(List.of());
+
+        List<RecipeResponseSummary> recipes = recipeServiceSummaries.getRestrictedRecipes(userId);
+        return ResponseEntity.ok(recipes);
     }
 }

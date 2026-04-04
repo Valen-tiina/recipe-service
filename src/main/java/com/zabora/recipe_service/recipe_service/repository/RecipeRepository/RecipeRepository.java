@@ -91,43 +91,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 """)
     List<RecipeName> findRecipeNamesByIds(@Param("ids") List<Integer> ids);
 
-/*    @Query("""
-    Select new com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary(
-            r.id, r.title, r.shortDescription, r.totalTimeMin ,ri.imageUrl
-    )
-    FROM Recipe r
-    LEFT JOIN r.images ri
-""")
-    List<RecipeResponseSummary> findAllSummaries();
 
-    @Query("""
-SELECT DISTINCT new com.zabora.recipe_service.recipe_service.model.dtos.recipesdtos.RecipesDTO.RecipeResponseSummary(
-        r.id, r.title, r.shortDescription, r.totalTimeMin, ri.imageUrl
-)
-FROM Recipe r
-LEFT JOIN r.images ri
-WHERE r.id NOT IN (
 
-    SELECT r2.id
-    FROM Recipe r2
-    JOIN r2.ingredients ri2
-    JOIN ri2.ingredient i
-    WHERE LOWER(i.name) IN :ingredientes
 
-)
-""")
-    List<RecipeResponseSummary> findRecipesWithoutIngredients(
-            @Param("ingredientes") List<String> ingredientes
-    );*/
-
-//    @Query("""
-//    SELECT DISTINCT r
-//    FROM Recipe r
-//    LEFT JOIN FETCH r.images ri
-//    LEFT JOIN FETCH r.ingredients ri2
-//    JOIN FETCH ri2.ingredient i
-//""")
-//    List<Recipe> findAllSummaries();
     
     @EntityGraph(attributePaths = {
     	    "difficulty",
@@ -138,24 +104,7 @@ WHERE r.id NOT IN (
     	""")
     	Page<Recipe> findAllSummaries(Pageable pageable);
 
-//    @Query("""
-//    SELECT DISTINCT r
-//    FROM Recipe r
-//    LEFT JOIN FETCH r.images
-//    LEFT JOIN FETCH r.ingredients ri
-//    LEFT JOIN FETCH ri.ingredient i
-//    LEFT JOIN FETCH ri.unit u
-//    LEFT JOIN FETCH u.measurement
-//    WHERE r.id NOT IN (
-//        SELECT r2.id
-//        FROM Recipe r2
-//        JOIN r2.ingredients ri2
-//        JOIN ri2.ingredient i2
-//        WHERE LOWER(i2.name) IN :ingredientes
-//    )
-//""")
-//    List<Recipe> findRecipesWithoutIngredients(@Param("ingredientes") List<String> ingredientes);
-    
+
     @Query("""
     	    SELECT r FROM Recipe r
     	    WHERE r.id NOT IN (
@@ -165,6 +114,12 @@ WHERE r.id NOT IN (
     	    )
     	""")
     	Page<Recipe> findRecipesWithoutIngredients(List<String> forbidden, Pageable pageable);
+
+@Query("SELECT COUNT(DISTINCT r) FROM Recipe r WHERE r.id NOT IN " +
+       "(SELECT DISTINCT ri.recipe.id FROM RecipeIngredient ri " +
+       "WHERE LOWER(ri.ingredient.name) IN :forbidden)")
+long countRecipesWithoutIngredients(@Param("forbidden") List<String> forbidden);
 }
+
 
 

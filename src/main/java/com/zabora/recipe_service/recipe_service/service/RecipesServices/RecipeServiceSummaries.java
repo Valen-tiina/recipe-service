@@ -173,4 +173,26 @@ public class RecipeServiceSummaries {
 				.toList();
 	}
 
+	/* para conteo restriccion */
+	public long countRestrictedRecipes(Long userId) {
+    MedicalInfoResponse medicalInfo = authClient.getUserMedicalInfo(userId);
+    List<String> forbidden = buildForbiddenIngredients(medicalInfo);
+
+    if (forbidden.isEmpty()) return 0;
+
+    long total = recipeRepository.count();
+    long allowed = recipeRepository.countRecipesWithoutIngredients(forbidden);
+    return total - allowed;
+}
+
+	public List<RecipeResponseSummary> getRestrictedRecipes(Long userId) {
+		MedicalInfoResponse medicalInfo = authClient.getUserMedicalInfo(userId);
+		List<String> forbidden = buildForbiddenIngredients(medicalInfo);
+
+		if (forbidden.isEmpty()) return List.of();
+
+		List<Recipe> restricted = recipeRepository.findByIngredientsNameIn(forbidden);
+
+		return mapToSummary(restricted);
+	}
 }
