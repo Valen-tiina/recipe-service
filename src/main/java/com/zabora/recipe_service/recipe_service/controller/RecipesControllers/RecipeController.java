@@ -60,7 +60,7 @@ public class RecipeController {
     }
 
     private boolean isAdmin(String role) {
-        return "ROLE_ADMIN".equals(role);
+        return "ADMIN".equals(role);
     }
 
     private ResponseEntity<Object> forbidden() {
@@ -72,7 +72,7 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<Object> createRecipe(@RequestBody CreateRecipe dto,
-            @RequestHeader(value = "X-User-Role", defaultValue = "") String role) {
+            @RequestHeader(value = "X-Rol", defaultValue = "") String role) {
 
         if (!isAdmin(role)) {
             return forbidden();
@@ -82,7 +82,7 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateRecipe(@PathVariable Integer id, @Valid @RequestBody UpdateRecipes dto,
-            @RequestHeader(value = "X-User-Role", defaultValue = "") String role) {
+            @RequestHeader(value = "X-Rol", defaultValue = "") String role) {
 
         if (!isAdmin(role)) {
             return forbidden();
@@ -131,7 +131,7 @@ public class RecipeController {
 
     @GetMapping
     public ResponseEntity<Object> getAllRecipes(
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role,
+            @RequestHeader(value = "X-Rol", defaultValue = "ROLE_GUEST") String role,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         List<ResponseRecipes> recipes = recipeServiceRead.getAllRecipes(role, page, size);
@@ -148,7 +148,7 @@ public class RecipeController {
 
     @GetMapping("/search")
     public ResponseEntity<Object> searchRecipesByTitle(@RequestParam String title,
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_GUEST") String role) {
+            @RequestHeader(value = "X-Rol", defaultValue = "ROLE_GUEST") String role) {
 
         List<RecipeResponseSummary> recipes = recipeServiceRead.searchRecipesByTitle(title, role);
 
@@ -169,7 +169,7 @@ public class RecipeController {
 
     @GetMapping("/search/ingredient")
     public ResponseEntity<Object> searchRecipesByIngredient(@RequestParam String ingredient,
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role) {
+            @RequestHeader(value = "X-Rol", defaultValue = "ROLE_USER") String role) {
 
         List<RecipeResponseSummary> recipes = recipeServiceRead.searchRecipesByIngredients(List.of(ingredient), role);
 
@@ -188,7 +188,7 @@ public class RecipeController {
 
     @GetMapping("/search/ingredient/multiple")
     public ResponseEntity<Object> searchRecipesByIngredientsMultiple(@RequestParam List<String> ingredients,
-            @RequestHeader(value = "X-User-Role", defaultValue = "ROLE_USER") String role) {
+            @RequestHeader(value = "X-Rol", defaultValue = "ROLE_USER") String role) {
 
         if (ingredients == null || ingredients.isEmpty()) {
             Map<String, Object> error = new HashMap<>();
@@ -236,7 +236,7 @@ public class RecipeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteRecipe(@PathVariable Integer id,
-            @RequestHeader(value = "X-User-Role", defaultValue = "") String role) {
+            @RequestHeader(value = "X-Rol", defaultValue = "") String role) {
 
         if (!isAdmin(role)) {
             return forbidden();
